@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::LinkedLists::Singly">
+		<class name="Stack" version="1.0">
+			<implements>Countable</implements>
+			
+			<description>
+				<p>
+					The Stack class provides the main functionalities of a stack
+					implemented using a singly linked list.
+				</p>
+				<p>
+					Unlike almost all other classes in this collection, this
+					class provides only a very small subset of the methods
+					provided by its SPL equivalent, <class>SplStack</class>. It
+					is, therefore, only a drop-in replacement for
+					<class>SplStack</class> in some circumstances. These
+					limitations are due to LIFO not being supported by the
+					<class>LinkedList</class> class on which this class is based
+					(via encapsulation).
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splstack.php">The SplStack class</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.countable.php">The Countable interface</link>
+			</see>
+			
+			<property name="ds" type="LinkedList" access="protected" version="1.0">
+				The singly linked list.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new stack implemented using a singly linked list</title>
+				<description>
+					 This constructs a new empty stack.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splstack.construct.php">SplStack::__construct</link>
+				</see>
+				
+				<example>
+					<title>Stack::__construct() example</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\LinkedLists\Singly\Stack;
+
+$s = new Stack();
+
+$s->push(1);
+$s->push(2);
+$s->push(3);
+
+while (!$s->isEmpty())  {
+ echo $s->pop()."\n";
+}
+?>
+]]></code>
+					<gives><![CDATA[
+3
+2
+1
+]]></gives>
+				</example>
+			</constructor>
+			
+			<method name="bottom" access="public" version="1.0">
+				<title>Peeks at the node from the beginning of the stack</title>
+				<description></description>
+				
+				<return>The value of the first node.</return>
+				<throws type="SEIDS::LinkedLists::CantPeekAtEmptyException">the data-structure is empty.</throws>
+			</method>
+			
+			<method name="count" access="public" version="1.0">
+				<title>Counts the number of elements in the stack.</title>
+				<description></description>
+				
+				<return type="int">Returns the number of elements in the stack.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/countable.count.php">Countable::count</link>
+				</see>
+			</method>
+			
+			<method name="isEmpty" access="public" version="1.0">
+				<title>Checks whether the stack is empty</title>
+				<description></description>
+				
+				<return type="bool">Returns whether the stack is empty.</return>
+			</method>
+			
+			<method name="pop" access="public" version="1.0">
+				<title>Pops a node from the end of the stack</title>
+				<description></description>
+				
+				<return>The value of the popped node.</return>
+				<throws type="SEIDS::LinkedLists::CantPopFromEmptyException">the data-structure is empty.</throws>
+			</method>
+			
+			<method name="push" access="public" version="1.0">
+				<title>Pushes an element at the end of the stack</title>
+				<description>
+					Pushes <parameter>value</parameter> at the end of the stack. 
+				</description>
+				
+				<parameter name="value">The value to push.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+			</method>
+			
+			<method name="top" access="public" version="1.0">
+				<title>Peeks at the node from the end of the stack</title>
+				<description></description>
+				
+				<return>The value of the last node.</return>
+				<throws type="SEIDS::LinkedLists::CantPeekAtEmptyException">the data-structure is empty.</throws>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

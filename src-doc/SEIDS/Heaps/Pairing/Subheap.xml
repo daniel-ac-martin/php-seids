@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Pairing">
+		<class name="Subheap" version="1.0">
+			<description>
+				<p>
+					This is a 'struct'-like class designed for use in the
+					pairing heap class, <class>Heap</class>.
+				</p>
+				<p>
+					It is not intended for public consumption.
+				</p>
+			</description>
+			
+			<property name="data" access="public" version="1.0">
+				The data of the node.
+			</property>
+			<property name="tag" access="public" version="1.0">
+				The tag of the node.
+			</property>
+			<property name="parent" type="Subheap" access="public" version="1.0">
+				The node's parent. (<constant>NULL</constant> in the case of the
+				top node.)
+			</property>
+			<property name="subheaps" type="array" access="public" version="1.0">
+				The node's subheaps. (Nodes below this one in the heap.)
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new item</title>
+				<description>
+					This constructs a new item for use in the binary heap class.
+				</description>
+				
+				<parameter name="data">The data of the node.</parameter>
+				<parameter name="tag">The tag of the node.</parameter>
+				<parameter name="subheaps" type="array" optional="yes">The node's subheaps. (Nodes below this one in the heap.)</parameter>
+				<parameter name="parent" type="Subheap" optional="yes">The node's parent. (<constant>NULL</constant> in the case of the top node.)</parameter>
+			</constructor>
+		</class>
+	</namespace>
+</apidoc>

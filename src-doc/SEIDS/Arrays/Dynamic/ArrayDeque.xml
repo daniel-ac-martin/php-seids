@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Arrays::Dynamic">
+		<class name="ArrayDeque" version="1.0">
+			<extends>DynamicArray</extends>
+			
+			<description>
+				<p>
+					The ArrayDeque class builds on the
+					functionality of <class>DynamicArray</class> (which itself
+					builds on <class>SplFixedArray</class>), providing an array
+					that can grow (and shrink) from either end.
+				</p>
+				<p>
+					The array is grown simply by adding an element to either
+					the	beginning or the end of the array.
+				</p>
+				<p>
+					The API is the same as <class>SplFixedArray</class> but with
+					the following extra methods:
+				</p>
+				<ul>
+					<li><method>DynamicArray::push</method></li>
+					<li><method>DynamicArray::pop</method></li>
+					<li><method>DynamicArray::getAllocatedSize</method></li>
+					<li><method>DynamicArray::isEmpty</method></li>
+					<li><method>ArrayDeque::shift</method></li>
+					<li><method>ArrayDeque::unshift</method></li>
+				</ul>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splfixedarray.php">
+					The SplFixedArray class
+				</link>
+			</see>
+			
+			<example>
+				<title>ArrayDeque usage example</title>
+				<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\Arrays\Dynamic\ArrayDeque;
+
+// Initialize the array with an initial length (optional)
+$array = new ArrayDeque(5);
+
+$array[1] = 2;
+$array[4] = "foo";
+
+var_dump($array[0]); // NULL
+var_dump($array[1]); // int(2)
+
+var_dump($array["4"]); // string(3) "foo"
+
+// Increase the size of the array to 10
+$array->setSize(10);
+
+$array[9] = "asdf";
+
+// Shrink the array to a size of 2
+$array->setSize(2);
+
+// Add an element to the start
+$array->unshift("first");
+
+// Add two elements to the end
+$array->push("second to last");
+$array[] = "last";
+
+var_dump($array->toArray());
+
+// The following lines throw a RuntimeException: Index invalid or out of range
+try {
+    var_dump($array["non-numeric"]);
+} catch(RuntimeException $re) {
+    echo "RuntimeException: ".$re->getMessage()."\n";
+}
+
+try {
+    var_dump($array[-1]);
+} catch(RuntimeException $re) {
+    echo "RuntimeException: ".$re->getMessage()."\n";
+}
+
+try {
+    var_dump($array[5]);
+} catch(RuntimeException $re) {
+    echo "RuntimeException: ".$re->getMessage()."\n";
+}
+?>
+]]></code>
+				<gives><![CDATA[
+NULL
+int(2)
+string(3) "foo"
+array(5) {
+  [0] =>
+  string(5) "first"
+  [1] =>
+  NULL
+  [2] =>
+  int(2)
+  [3] =>
+  string(14) "second to last"
+  [4] =>
+  string(4) "last"
+}
+RuntimeException: Index invalid or out of range
+RuntimeException: Index invalid or out of range
+RuntimeException: Index invalid or out of range
+]]></gives>
+			</example>
+			
+			<property name="start" type="int" access="protected" version="1.0">
+				The index of the start of the external array within the internal
+				array.
+			</property>
+			<property name="current_key" type="int" access="protected" version="1.0">
+				The current array index.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new array deque</title>
+				<description>
+					Initializes an array-deque with a number of
+					<constant>NULL</constant> values equal to
+					<parameter>size</parameter>.
+				</description>
+				
+				<parameter type="int" name="size" value="0">The initial size of the array. This expects a number between <literal>0</literal> and <constant>PHP_INT_MAX</constant>.</parameter>
+				<throws type="::InvalidArgumentException"><parameter>size</parameter> is a negative number.</throws>
+				<throws type="E_WARNING"><parameter>size</parameter> cannot be parsed as a number.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.construct.php">SplFixedArray::__construct</link>
+				</see>
+				
+				<example>
+					<title>ArrayDeque::__construct() example</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use \SEIDS\Arrays\Dynamic\ArrayDeque;
+
+$array = new ArrayDeque(5);
+
+$array[1] = 2;
+$array[4] = "foo";
+
+foreach($array as $v) {
+  var_dump($v);
+}
+?>
+]]></code>
+					<gives><![CDATA[
+NULL
+int(2)
+NULL
+NULL
+string(3) "foo"
+]]></gives>
+				</example>
+			</constructor>
+			
+			<method name="current" access="public" version="1.0">
+				<title>Return current array entry</title>
+				<description>Get the current array element.</description>
+				
+				<return>The current element value.</return>
+				<throws type="::RuntimeException">the internal array pointer points to an invalid index or is out of bounds.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.current.php">SplFixedArray::current</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.current.php">Iterator::current</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/class.runtimeexception.php">The RuntimeException class</link>
+				</see>
+			</method>
+			
+			<method name="key" access="public" version="1.0">
+				<title>Return current array index</title>
+				<description>Returns the current array index.</description>
+				
+				<return type="int">The current array index.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.key.php">SplFixedArray::key</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.key.php">Iterator::key</link>
+				</see>
+			</method>
+			
+			<method name="next" access="public" version="1.0">
+				<title>Move to next entry</title>
+				<description>
+					Move the iterator to the next array entry.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.next.php">SplFixedArray::next</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.next.php">Iterator::next</link>
+				</see>
+			</method>
+			
+			<method name="offsetExists" access="public" version="1.0">
+				<title>Returns whether the requested index exists</title>
+				<description>
+					Checks whether the requested index
+					<parameter>index</parameter> exists.
+				</description>
+				
+				<parameter type="int" name="index">The index being checked.</parameter>
+				<return type="bool"><constant>TRUE</constant> if the requested <parameter>index</parameter> exists, otherwise <constant>FALSE</constant></return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.offsetexists.php">SplFixedArray::offsetExists</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetexists.php">ArrayAccess::offsetExists</link>
+				</see>
+			</method>
+			
+			<method name="offsetGet" access="public" version="1.0">
+				<title>Returns the value at the specified index</title>
+				<description>
+					Returns the value at the index <parameter>index</parameter>.
+				</description>
+				
+				<parameter type="int" name="index">The index with the value.</parameter>
+				<return>The value at the specified <parameter>index</parameter>.</return>
+				<throws type="SEIDS::Arrays::InvalidIndexException"><parameter>index</parameter> is outside the defined size of the array or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.offsetget.php">SplFixedArray::offsetGet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetget.php">ArrayAccess::offsetGet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/class.runtimeexception.php">The RuntimeException class</link>
+				</see>
+			</method>
+			
+			<method name="offsetSet" access="public" version="1.0">
+				<title>Sets a new value at a specified index</title>
+				<description>
+					Sets the value at the specified <parameter>index</parameter>
+					to <parameter>newval</parameter>.
+				</description>
+				
+				<parameter type="int" name="index">The index being set.</parameter>
+				<parameter name="newval">The new value for the <parameter>index</parameter>.</parameter>
+				<throws type="SEIDS::Arrays::InvalidIndexException">when <parameter>index</parameter> is outside the defined size of the array or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.offsetset.php">SplFixedArray::offsetSet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetset.php">ArrayAccess::offsetSet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/class.runtimeexception.php">The RuntimeException class</link>
+				</see>
+			</method>
+			
+			<method name="offsetUnset" access="public" version="1.0">
+				<title>Unsets the value at the specified index</title>
+				<description>
+					Unsets the value at the specified index.
+				</description>
+				
+				<parameter type="int" name="index">The index being unset.</parameter>
+				<throws type="SEIDS::Arrays::InvalidIndexException"><parameter>index</parameter> is outside the defined size of the array or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.offsetunset.php">SplFixedArray::offsetUnset</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetunset.php">ArrayAccess::offsetUnset</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/class.runtimeexception.php">The RuntimeException class</link>
+				</see>
+			</method>
+			
+			<method name="rewind" access="public" version="1.0">
+				<title>Rewind iterator back to the start</title>
+				<description>
+					Rewinds the iterator to the beginning.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.rewind.php">SplFixedArray::rewind</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.rewind.php">Iterator::rewind</link>
+				</see>
+			</method>
+			
+			<method name="shift" access="public" version="1.0">
+				<title>Shifts a node from the beginning of the array</title>
+				<description></description>
+				
+				<return>The value of the shifted node. </return>
+				<throws type="SEIDS::Arrays::CantShiftFromEmptyException">the array is empty.</throws>
+			</method>
+			
+			<method name="toArray" access="public" version="1.0">
+				<title>Returns a PHP array from the dynamic array</title>
+				<description>
+					Returns a PHP array from the dynamic array.
+				</description>
+				
+				<return type="array">Returns a PHP <type>array</type>, similar to the dynamic array.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.toarray.php">SplFixedArray::toArray</link>
+				</see>
+				
+				<example>
+					<title>ArrayDeque::toArray() example</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use \SEIDS\Arrays\Dynamic\ArrayDeque;
+
+$fa = new ArrayDeque(3);
+$fa[0] = 0;
+$fa[2] = 2;
+var_dump($fa->toArray());
+?>
+]]></code>
+					<gives><![CDATA[
+array(3) {
+  [0] =>
+  int(0)
+  [1] =>
+  NULL
+  [2] =>
+  int(2)
+}
+]]></gives>
+				</example>
+			</method>
+			
+			<method name="unshift" access="public" version="1.0">
+				<title>Prepends the array with an element</title>
+				<description>
+					Prepends <parameter>value</parameter> at the beginning of
+					the array.
+				</description>
+				
+				<parameter name="value">The value to unshift.</parameter>
+			</method>
+			
+			<method name="valid" access="public" version="1.0">
+				<title>Check whether the array contains more elements</title>
+				<description>
+					Checks if the array contains any more elements.
+				</description>
+				
+				<return type="bool">Returns <constant>TRUE</constant> if the array contains any more elements, <constant>FALSE</constant> otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splfixedarray.valid.php">SplFixedArray::valid</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.valid.php">Iterator::valid</link>
+				</see>
+			</method>
+			
+			<method name="map" access="protected" version="1.0">
+				<title>Maps an index to the internal array</title>
+				<description>
+					Maps an index in the external array to its equivalent index
+					in the internal array.
+				</description>
+				
+				<parameter type="int" name="index">An index in the external array</parameter>
+				<return type="int">The equivalent index in the internal array</return>
+			</method>
+			
+			<method name="offsetValid" access="protected" version="1.0">
+				<title>Returns whether the requested index is valid</title>
+				<description>Checks whether the requested index <parameter>index</parameter> is valid.</description>
+				
+				<parameter type="int" name="index">The index being checked.</parameter>
+				<return type="bool"><constant>TRUE</constant> if the requested <parameter>index</parameter> is valid, otherwise <constant>FALSE</constant>.</return>
+			</method>
+			
+			<method name="resize" access="protected" version="1.0">
+				<title>Resizes the internal array</title>
+				<description>
+					Resizes the internal array to <parameter>size</parameter>.
+					If <parameter>count</parameter> is set then it becomes the
+					new value of <method>DynamicArray::count</method> and any
+					extra elements on the internal array are set to
+					<constant>NULL</constant>.
+				</description>
+				
+				<parameter type="int" name="size">The new size of the internal array.</parameter>
+				<parameter type="int" name="count" optional="yes">The new <method>DynamicArray::count</method> value or size of the external array.</parameter>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

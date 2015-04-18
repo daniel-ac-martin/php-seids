@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps">
+		<class name="PriorityQueue" version="1.0">
+			<implements>Countable</implements>
+			<implements>Iterator</implements>
+			
+			<title>A generic priority queue class</title>
+			<description>
+				<p>
+					This is the abstract base class from which all the priority
+					queue implementations in this library are derived.
+				</p>
+				<p>
+					It provides the same interface as
+					<class>SplPriorityQueue</class> with the extra method,
+					<method>PriorityQueue::update</method> which allows one to
+					change the priority of a node in the queue.
+				</p>
+				<p>
+					The methods implemented in this class are common to all of
+					the priority queue implementations in this library.
+				</p>
+				<note>
+					This class is not intended for public consumption. Most
+					users should instead be deriving from one of the concrete
+					classes, such as the pairing priority queue class.
+				</note>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splpriorityqueue.php">The SplPriorityQueue class</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.countable.php">The Countable interface</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.iterator.php">The Iterator interface</link>
+			</see>
+			<see>
+				<class>Pairing::PriorityQueue</class>
+			</see>
+			
+			<property name="EXTR_DATA" type="int" access="public" constant="yes" value="1" version="1.0">
+				(1) Flag for extracting data from the priority queue.
+			</property>
+			<property name="EXTR_PRIORITY" type="int" access="public" constant="yes" value="2" version="1.0">
+				(2) Flag for extracting priorities from the priority queue.
+			</property>
+			<property name="EXTR_BOTH" type="int" access="public" constant="yes" value="3" version="1.0">
+				(3) The data and priority extraction flags combined. Used for
+				extracting both simultaneously.
+			</property>
+			
+			<property name="DataStructure" access="protected" version="1.0">
+				The underlying data-structure, generally a heap.
+			</property>
+			<property name="flags" type="int" access="protected" value="PriorityQueue::EXTR_DATA" version="1.0">
+				The extraction mode. Defaults to
+				<constant>PriorityQueue::EXTR_DATA</constant>.
+			</property>
+			
+			<constructor access="public" abstract="yes" version="1.0">
+				<title>Constructs a new empty queue</title>
+				<description>
+					This constructs a new empty queue.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.construct.php">SplPriorityQueue::__construct</link>
+				</see>
+			</constructor>
+			
+			<method name="__clone" access="public" version="1.0">
+				<title>Clone the queue</title>
+				<description>Clones the queue.</description>
+			</method>
+			
+			<method name="compare" access="protected" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>priority1</parameter> with
+						<parameter>priority2</parameter>.
+					</p>
+					<p>
+						This method can be overloaded to produce a min-priority
+						queue.
+					</p>
+					<note>
+						Multiple elements with the same priority will get
+						dequeued in no particular order.
+					</note>
+				</description>
+				
+				<parameter name="priority1">The priority of the first node being compared.</parameter>
+				<parameter name="priority2">The priority of the second node being compared.</parameter>
+				<return type="int">Result of the comparison, positive integer if <parameter>priority1</parameter> is greater than <parameter>priority2</parameter>, <literal>0</literal> if they are equal, negative integer otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.compare.php">SplPriorityQueue::compare</link>
+				</see>
+				<see>
+					<method>MinPriorityQueue::compare</method>
+				</see>
+			</method>
+			
+			<method name="count" access="public" version="1.0">
+				<title>Counts the number of elements in the queue</title>
+				<description></description>
+				
+				<return type="int">Returns the number of elements in the queue.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.count.php">SplPriorityQueue::count</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/countable.count.php">Countable::count</link>
+				</see>
+			</method>
+			
+			<method name="current" access="public" version="1.0">
+				<title>Return current node pointed by the iterator</title>
+				<description>Get the current datastructure node.</description>
+				
+				<return>The value or priority (or both) of the current node, depending on the extract flag.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.current.php">SplPriorityQueue::current</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.current.php">Iterator::current</link>
+				</see>
+			</method>
+			
+			<method name="extract" access="public" version="1.0">
+				<title>Extracts a node from top of the queue</title>
+				<description></description>
+				
+				<return>The value or priority (or both) of the extracted node, depending on the extract flag.</return>
+				<throws type="SEIDS::Heaps::ExtractException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.extract.php">SplPriorityQueue::extract</link>
+				</see>
+			</method>
+			
+			<method name="insert" access="public" version="1.0">
+				<title>Inserts an element in the queue</title>
+				<description>
+					Insert <parameter>value</parameter> with the priority
+					<parameter>priority</parameter> in the queue.
+				</description>
+				
+				<parameter name="value">The value to insert.</parameter>
+				<parameter name="priority">The associated priority.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.insert.php">SplPriorityQueue::insert</link>
+				</see>
+			</method>
+			
+			<method name="isEmpty" access="public" version="1.0">
+				<title>Checks whether the queue is empty</title>
+				<description></description>
+				
+				<return type="bool">Returns whether the queue is empty.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.isempty.php">SplPriorityQueue::isEmpty</link>
+				</see>
+			</method>
+			
+			<method name="key" access="public" version="1.0">
+				<title>Return current node index</title>
+				<description>
+					<p>
+						This function returns the current node index.
+					</p>
+					<note>
+						The current node is always viewed as the last node.
+						Which means this function will always return
+						'<method>PriorityQueue::count</method><literal> - 1</literal>'.
+					</note>
+				</description>
+				
+				<return type="int">The current node index.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.key.php">SplPriorityQueue::key</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.key.php">Iterator::key</link>
+				</see>
+			</method>
+			
+			<method name="next" access="public" version="1.0">
+				<title>Move to the next node</title>
+				<description>Extracts the top node from the queue.</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.next.php">SplPriorityQueue::next</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.next.php">Iterator::next</link>
+				</see>
+			</method>
+			
+			<method name="recoverFromCorruption" access="public" version="1.0">
+				<title>Recover from the corrupted state</title>
+				<description>
+					Recover from the corrupted state and allow further actions
+					on the queue.
+				</description>
+				
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.recoverfromcorruption.php">SplPriorityQueue::recoverFromCorruption</link>
+				</see>
+			</method>
+			
+			<method name="rewind" access="public" version="1.0">
+				<title>Rewind iterator back to the start (no-op)</title>
+				<description>
+					This rewinds the iterator to the beginning. This is a no-op
+					for priority queues as the iterator is virtual and in fact
+					never moves from the top of the queue.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.rewind.php">SplPriorityQueue::rewind</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.rewind.php">Iterator::rewind</link>
+				</see>
+			</method>
+			
+			<method name="setExtractFlags" access="public" version="1.0">
+				<title>Sets the mode of extraction</title>
+				<description>
+					<p>
+						Defines what is extracted by
+						<method>PriorityQueue::current</method>,
+						<method>PriorityQueue::top</method> and
+						<method>PriorityQueue::extract</method>.
+					</p>
+					<p>
+						The options are as follows:
+					</p>
+					<ul>
+						<li><constant>PriorityQueue::EXTR_DATA</constant> (0x00000001): Extract the data</li>
+						<li><constant>PriorityQueue::EXTR_PRIORITY</constant> (0x00000002): Extract the priority</li>
+						<li><constant>PriorityQueue::EXTR_BOTH</constant> (0x00000003): Extract an array containing both</li>
+					</ul>
+					<note>
+						The default mode is: <constant>PriorityQueue::EXTR_DATA</constant>
+					</note>
+				</description>
+				
+				<parameter type="int" name="flags">The desired extraction mode.</parameter>
+				<return type="int">The new extraction mode.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.setextractflags.php">SplPriorityQueue::setExtractFlags</link>
+				</see>
+			</method>
+			
+			<method name="top" access="public" version="1.0">
+				<title>Peeks at the node from the top of the queue</title>
+				<description>
+					Returns the value at the top of the queue without removing
+					it.
+				</description>
+				
+				<return>The value or priority (or both) of the top node, depending on the extract flag.</return>
+				<throws type="SEIDS::Heaps::PeekException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.top.php">SplPriorityQueue::top</link>
+				</see>
+			</method>
+			
+			<method name="update" access="public" version="1.0">
+				<title>Updates a node in the queue to a new priority</title>
+				<description>
+					<p>
+						Updates a node in the heap with the value,
+						<parameter>value</parameter>, to a new priority,
+						<parameter>priority</parameter>.
+					</p>
+					<p>
+						If two nodes in the heap have the same value then only
+						one will be changed.
+					</p>
+				</description>
+				
+				<parameter name="value">The value to be updated.</parameter>
+				<parameter name="priority">The new priority.</parameter>
+				<throws type="SEIDS::Heaps::UpdateException"><parameter>value1</parameter> is not in the heap.</throws>
+				
+				<example>
+					<title>PriorityQueue::update example (using a pairing heap)</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\Heaps\Pairing\PriorityQueue;
+
+$q = new PriorityQueue();
+
+$q->insert('you',   9);
+$q->insert('never', 7);
+$q->insert('gonna', 5);
+$q->insert('give',  3);
+$q->insert('up',    1);
+
+$q2 = clone $q;
+
+$q->update('you', 2);
+
+foreach ($q2 as $v) {
+ var_dump($v);
+}
+
+echo "\n";
+
+foreach ($q as $v) {
+ var_dump($v);
+}
+
+?>
+]]></code>
+					<gives><![CDATA[
+string(3) "you"
+string(5) "never"
+string(5) "gonna"
+string(4) "give"
+string(2) "up"
+
+string(5) "never"
+string(5) "gonna"
+string(4) "give"
+string(3) "you"
+string(2) "up"
+]]></gives>
+				</example>
+			</method>
+			
+			<method name="valid" access="public" version="1.0">
+				<title>Check whether the queue contains more nodes</title>
+				<description>
+					Checks if the queue contains any more nodes.
+				</description>
+				
+				<return type="bool">Returns <constant>TRUE</constant> if the queue contains any more nodes, <constant>FALSE</constant> otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.valid.php">SplPriorityQueue::valid</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.valid.php">Iterator::valid</link>
+				</see>
+			</method>
+			
+			<method name="processExtract" access="protected" version="1.0">
+				<title>Processes a node according to the extraction mode</title>
+				<description>
+					<p>
+						This method is called by
+						<method>PriorityQueue::current</method>,
+						<method>PriorityQueue::top</method> and
+						<method>PriorityQueue::extract</method>. It is used to
+						process nodes according to the extraction mode.
+					</p>
+					<p>
+						In the case of
+						<constant>PriorityQueue::EXTR_DATA</constant> only the
+						data is returned. In the case of
+						<constant>PriorityQueue::EXTR_PRIORITY</constant> only
+						the priority is returned. Finally, in the case of
+						<constant>PriorityQueue::EXTR_BOTH</constant> an array
+						containing both the data and the priority is returned.
+					</p>
+				</description>
+				
+				<parameter type="PriorityQueueHeapItem" name="extract">The node to be processed.</parameter>
+				<return>The node's data, priority or an array of both depending on the extraction mode.</return>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps">
+		<class name="Heap" version="1.0">
+			<implements>Countable</implements>
+			<implements>Iterator</implements>
+			
+			<title>A generic heap class</title>
+			<description>
+				<p>
+					This is the abstract base class from which all the heap
+					implementations in this library are derived.
+				</p>
+				<p>
+					It provides the same interface as SplHeap with the extra
+					method, <method>Heap::update</method> which allows one to
+					update a node in the heap.
+				</p>
+				<p>
+					With the exceptions of
+					<method>Heap::recoverFromCorruption</method> and
+					<method>Heap::value</method>, the methods implemented in
+					this class are common to all of the heap implementations in
+					this library.
+				</p>
+				<note>
+					This class is not intended for public consumption. Most
+					users should instead be deriving from one of the 'almost
+					concrete' classes, such as the pairing heap class,
+					<class>Pairing::Heap</class>.
+				</note>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/spl.datastructures.php">The SplHeap class</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.countable.php">The Countable interface</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.iterator.php">The Iterator interface</link>
+			</see>
+			<see>
+				<class>Pairing::Heap</class>
+			</see>
+			
+			<property name="size" type="int" access="protected" version="1.0">
+				The number of items in the heap.
+			</property>
+			
+			<constructor access="public" abstract="yes" version="1.0">
+				<title>Constructs a new heap</title>
+				<description>
+					This constructs a new heap. If no argument is supplied the
+					heap will be empty.
+				</description>
+				
+				<parameter type="array" name="array" optional="yes">An array of value to initialise the heap with.</parameter>
+				<throws type="SEIDS::Heaps::ConstructorException"><parameter>array</parameter> is not an array.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.construct.php">SplHeap::__construct</link>
+				</see>
+			</constructor>
+			
+			<method name="compare" access="protected" abstract="yes" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>value1</parameter> with
+						<parameter>value2</parameter>.
+					</p>
+					<note>
+						Having multiple elements with the same value in a Heap
+						is not recommended. They will end up in an arbitrary
+						relative position.
+					</note>
+					<warning><p>
+						Throwing exceptions in <method>Heap::compare</method>
+						can corrupt the Heap and place it in a blocked state.
+						You can unblock it by calling
+						<method>Heap::recoverFromCorruption</method>. However,
+						some elements might not be placed correctly and it may
+						hence break the heap-property.
+					</p></warning>
+				</description>
+				
+				<parameter name="value1">The value of the first node being compared.</parameter>
+				<parameter name="value2">The value of the second node being compared.</parameter>
+				<return type="int">Result of the comparison, positive integer if <parameter>value1</parameter> is greater than <parameter>value2</parameter>, <literal>0</literal> if they are equal, negative integer otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.compare.php">SplHeap::compare</link>
+				</see>
+			</method>
+			
+			<method name="extract" access="public" abstract="yes" version="1.0">
+				<title>Extracts a node from top of the heap</title>
+				<description>
+					Extracts a node from top of the heap and sifts up.
+				</description>
+				
+				<return>The value of the extracted node.</return>
+				<throws type="SEIDS::Heaps::ExtractException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.extract.php">SplHeap::extract</link>
+				</see>
+			</method>
+			
+			<method name="insert" access="public" abstract="yes" version="1.0">
+				<title>Inserts an element in the heap</title>
+				<description>
+					Insert <parameter>value</parameter> in the heap by sifting
+					it up.
+				</description>
+				
+				<parameter name="value">The value to insert.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.insert.php">SplHeap::insert</link>
+				</see>
+			</method>
+			
+			<method name="recoverFromCorruption" access="public" abstract="yes" version="1.0">
+				<title>Recover from the corrupted state</title>
+				<description>
+					<p>
+						Recover from the corrupted state and allow further
+						actions on the heap.
+					</p>
+					<note>
+						This function is undocumented in the SPL. It is provided
+						only for API compatibility.
+					</note>
+				</description>
+				
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.recoverfromcorruption.php">SplHeap::recoverFromCorruption</link>
+				</see>
+			</method>
+			
+			<method name="top" access="public" abstract="yes" version="1.0">
+				<title>Peeks at the node from the top of the heap</title>
+				<description>
+					Returns the value at the top of the heap without removing
+					it.
+				</description>
+				
+				<return>The value of the node on the top.</return>
+				<throws type="SEIDS::Heaps::PeekException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.top.php">SplHeap::top</link>
+				</see>
+			</method>
+			
+			<method name="update" access="public" abstract="yes" version="1.0">
+				<title>Updates a node in the heap to a new value</title>
+				<description>
+					<p>
+						Updates a node in the heap from its current value to a
+						new value, <parameter>value2</parameter>. Where the
+						current value is given by executing
+						<method>Heap::value</method> on
+						<parameter>value1</parameter>.
+					</p>
+					<p>
+						If two nodes in the heap have the same value then only
+						one will be changed.
+					</p>
+				</description>
+				
+				<parameter name="value1">The current value.</parameter>
+				<parameter name="value2">The new value.</parameter>
+				<throws type="SEIDS::Heaps::UpdateException"><parameter>value1</parameter> is not in the heap.</throws>
+			</method>
+			
+			<method name="count" access="public" version="1.0">
+				<title>Counts the number of elements in the heap</title>
+				<description></description>
+				
+				<return type="int">Returns the number of elements in the heap.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.count.php">SplHeap::count</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/countable.count.php">Countable::count</link>
+				</see>
+			</method>
+			
+			<method name="current" access="public" version="1.0">
+				<title>Return current node pointed by the iterator</title>
+				<description>Get the current datastructure node.</description>
+				
+				<return>The current node value.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.current.php">SplHeap::current</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.current.php">Iterator::current</link>
+				</see>
+			</method>
+			
+			<method name="isEmpty" access="public" version="1.0">
+				<title>Checks whether the heap is empty</title>
+				<description></description>
+				
+				<return type="bool">Returns whether the heap is empty.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.isempty.php">SplHeap::isEmpty</link>
+				</see>
+			</method>
+			
+			<method name="key" access="public" version="1.0">
+				<title>Return current node index</title>
+				<description>
+					<p>
+						This function returns the current node index.
+					</p>
+					<note>
+						The current node is always viewed as the last node.
+						Which means this function will always return
+						'<method>Heap::count</method><literal> - 1</literal>'.
+					</note>
+				</description>
+				
+				<return type="int">The current node index.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.key.php">SplHeap::key</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.key.php">Iterator::key</link>
+				</see>
+			</method>
+			
+			<method name="next" access="public" version="1.0">
+				<title>Move to the next node</title>
+				<description>
+					Move to the next node. This will delete the top node of the
+					heap.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.next.php">SplHeap::next</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.next.php">Iterator::next</link>
+				</see>
+			</method>
+			
+			<method name="rewind" access="public" version="1.0">
+				<title>Rewind iterator back to the start (no-op)</title>
+				<description>
+					This rewinds the iterator to the beginning. This is a no-op
+					for heaps as the iterator is virtual and in fact never moves
+					from the top of the heap.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.rewind.php">SplHeap::rewind</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.rewind.php">Iterator::rewind</link>
+				</see>
+			</method>
+			
+			<method name="valid" access="public" version="1.0">
+				<title>Check whether the heap contains more nodes</title>
+				<description>
+					Checks if the heap contains any more nodes.
+				</description>
+				
+				<return type="bool">Returns <constant>TRUE</constant> if the heap contains any more nodes, <constant>FALSE</constant> otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.valid.php">SplHeap::valid</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.valid.php">Iterator::valid</link>
+				</see>
+			</method>
+			
+			<method name="value" access="protected" version="1.0">
+				<title>Returns the true value of a node</title>
+				<description>
+					<p>
+						Takes a node and extracts its 'value' as opposed to its
+						priority within the heap.
+					</p>
+					<p>
+						In this implementation, this method returns its argument
+						unaltered. But it can be overloaded in child classes to
+						produce an updatable heap suitable for use by a priority
+						queue.
+					</p>
+					<p>
+						This method is called by
+						<method>Heap::hashtIndex</method> allowing one to update
+						a node's priority without knowing its current priority.
+					</p>
+				</description>
+				
+				<parameter name="value">The node.</parameter>
+				<return>The 'value' of the node.</return>
+			</method>
+			
+			<method name="hashtIndex" access="protected" version="1.0">
+				<title>Returns an index for use in a hash table</title>
+				<description>
+					<p>
+						Takes a value and returns a value to be used to
+						represent it as an index in a hash table. (Hash tables
+						are used to 'tag' nodes for faster updates.)
+					</p>
+					<p>
+						In most cases it simply returns
+						<parameter>value</parameter> unaltered (unless
+						<method>Heap::value</method> has been overridden), but
+						in the case of objects it returns their
+						<function>spl_object_hash</function>.
+					</p>
+				</description>
+				
+				<parameter name="value">The value to be mapped.</parameter>
+				<return>The hash table index.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/function.spl-object-hash.php">spl_object_hash</link>
+				</see>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

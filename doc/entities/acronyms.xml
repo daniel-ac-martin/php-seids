@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<section xml:id="acronyms">
+	<title>Acronyms</title>
+	<variablelist>
+		<varlistentry>
+			<term>PHP</term>
+			<listitem>
+				<simpara>PHP: Hypertext Preprocessor</simpara>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>SEIDS</term>
+			<listitem>
+				<simpara>Supplementary, Easily Interchangeable Data Structures</simpara>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+</section>

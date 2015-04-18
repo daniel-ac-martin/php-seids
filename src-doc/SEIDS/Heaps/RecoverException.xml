@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps">
+		<class name="RecoverException" version="1.0">
+			<extends>RuntimeException</extends>
+			<implements>ExceptionInterface</implements>
+			
+			<description>
+				<p>
+					Exception objects of this class are thrown when one calls
+					the <method>Heap::recoverFromCorruption</method> method on a
+					heap that is corrupted beyond recovery.
+				</p>
+				<p>
+					It is only intended that users should test for this
+					exception, when necessary, rather than throwing it in their
+					own code.
+				</p>
+			</description>
+			
+			<see>
+				<method>Heap::recoverFromCorruption</method>
+			</see>
+			<see>
+				<link href="https://en.wiktionary.org/wiki/FUBAR">FUBAR</link>
+			</see>
+		</class>
+	</namespace>
+</apidoc>

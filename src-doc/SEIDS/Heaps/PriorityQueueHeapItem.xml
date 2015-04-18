@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps">
+		<class name="PriorityQueueHeapItem" version="1.0">
+			<description>
+				<p>
+					This is a 'struct'-like class designed for use in the
+					priority queue oriented heap classes.
+				</p>
+				<p>
+					It is not intended for public consumption.
+				</p>
+			</description>
+			
+			<property name="value" access="public" version="1.0">
+				The value of the item.
+			</property>
+			<property name="priority" access="public" version="1.0">
+				The priority of the item.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new item</title>
+				<description>
+					This constructs a new item for use in the priority queue
+					oriented heap classes.
+				</description>
+				
+				<parameter name="value">The value of the item.</parameter>
+				<parameter name="priority">The priority of the item.</parameter>
+			</constructor>
+			
+			<method name="__clone" access="public" version="1.0">
+				<title>Clone the item</title>
+				<description>Clones the item.</description>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

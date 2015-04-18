@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--============================================================================
+// apidoc
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+//===========================================================================-->
+<versions xmlns:xi="http://www.w3.org/2001/XInclude">
+	<xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(/docbook-phd-phpnet/versions/*)" />
+</versions>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps">
+		<class name="MinPriorityQueue" version="1.0">
+			<extends>PriorityQueue</extends>
+			
+			<title>A generic min-priority queue class</title>
+			<description>
+				<p>
+					This is the abstract base class from which all the
+					min-priority queue implementations in this library are
+					derived.
+				</p>
+				<p>
+					It provides the same interface as SplPriorityQueue with the
+					extra method, <method>PriorityQueue::update</method> which
+					allows one to change the priority of a node in the queue.
+				</p>
+				<note>
+					This class is not intended for public consumption. Most
+					users should instead be deriving from one of the concrete
+					classes, such as the pairing min-priority queue class.
+				</note>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splpriorityqueue.php">The SplPriorityQueue class</link>
+			</see>
+			<see>
+				<class>Pairing::MinPriorityQueue</class>
+			</see>
+			
+			<method name="compare" access="protected" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>priority1</parameter> with
+						<parameter>priority2</parameter>.
+					</p>
+					<p>
+						This method overrides
+						<method>PriorityQueue::compare</method> to produce a
+						min-priority queue.
+					</p>
+					<note>
+						Multiple elements with the same priority will get
+						dequeued in no particular order.
+					</note>
+				</description>
+				
+				<parameter name="priority1">The priority of the first node being compared.</parameter>
+				<parameter name="priority2">The priority of the second node being compared.</parameter>
+				<return type="int">Result of the comparison, positive integer if <parameter>priority1</parameter> is less than <parameter>priority2</parameter>, <literal>0</literal> if they are equal, negative integer otherwise.</return>
+				
+				<see>
+					<method>PriorityQueue::compare</method>
+				</see>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

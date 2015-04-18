@@ -1,0 +1,10 @@
+# Composer
+composer.lock
+vendor/
+
+# Auto-generated stuff
+build/
+
+# Local overrides
+apidoc.xml
+phpunit.xml

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::LinkedLists::Singly">
+		<class name="LinkedList" version="1.0">
+			<implements>ArrayAccess</implements>
+			<implements>Countable</implements>
+			<implements>Iterator</implements>
+			
+			<description>
+				<p>
+					The LinkedList class provides the main functionalities of a
+					singly linked list.
+				</p>
+				<p>
+					It provides the interface as
+					<class>SplDoublyLinkedList</class> but doesn't support LIFO
+					mode. It can therefore be used as a drop-in replacement for
+					<class>SplDoublyLinkedList</class> when you do not need
+					LIFO.
+				</p>
+				<p>
+					On top of <class>SplDoublyLinkedList</class>'s interface
+					this class provides the following extra methods:
+				</p>
+				<ul>
+					<li><method>LinkedList::move</method></li>
+					<li><method>LinkedList::remove</method></li>
+				</ul>
+				<p>
+					Please note that in practice many operations are more
+					computationally expensive on singly linked lists relative to
+					doubly linked lists. Additionally, this class is implemented
+					in PHP whereas <class>SplDoublyLinkedList</class> is
+					implemented in C, which is considerably faster.
+				</p>
+				<p>
+					This class is therefore not recommended for production code,
+					and is provided for the sake of completeness and
+					experimental purposes.
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.spldoublylinkedlist.php">The SplDoublyLinkedList class</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.arrayaccess.php">The ArrayAccess interface</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.countable.php">The Countable interface</link>
+			</see>
+			<see>
+				<link href="http://php.net/manual/en/class.iterator.php">The Iterator interface</link>
+			</see>
+			
+			<property name="IT_MODE_DELETE" type="int" access="public" constant="yes" version="1.0" value="1">
+				(1) Flag for deleting whilst iterating.
+			</property>
+			<property name="IT_MODE_KEEP" type="int" access="public" constant="yes" version="1.0" value="0">
+				(0) Absence of flag for deleting whilst iterating.
+			</property>
+			<property name="IT_MODE_LIFO" type="int" access="public" constant="yes" version="1.0" value="2">
+				(2) Flag for Last In First Out mode.
+			</property>
+			<property name="IT_MODE_FIFO" type="int" access="public" constant="yes" version="1.0" value="0">
+				(0) Absence of flag for Last In First Out mode.
+			</property>
+			
+			<property name="first" type="Item" access="protected" version="1.0">
+				The first item in the list.
+			</property>
+			<property name="last" type="Item" access="protected" version="1.0">
+				The last item in the list.
+			</property>
+			<property name="current" type="Item" access="protected" version="1.0">
+				The current item (when iterating).
+			</property>
+			<property name="current_key" type="int" access="protected" version="1.0">
+				The index of the current item.
+			</property>
+			<property name="worker" type="Item" access="protected" version="1.0">
+				The last item the class 'worked' on.
+			</property>
+			<property name="worker_key" type="int" access="protected" version="1.0">
+				The index of the last item the class 'worked' on.
+			</property>
+			<property name="size" type="int" access="protected" version="1.0">
+				The number of items in the list.
+			</property>
+			<property name="flags" type="int" access="protected" version="1.0">
+				The iteration mode.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new singly linked list</title>
+				<description>
+					This constructs a new empty singly linked list. 
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.construct.php">SplDoublyLinkedList::__construct</link>
+				</see>
+				
+				<example>
+					<title>LinkedList::__construct() example</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\LinkedLists\Singly\LinkedList;
+
+$sll = new LinkedList();
+
+$sll->push(2);
+$sll->push(3);
+$sll->unshift(5);
+
+foreach($sll as $item) echo $item."\n";
+?>
+]]></code>
+					<gives><![CDATA[
+5
+2
+3
+]]></gives>
+				</example>
+			</constructor>
+			
+			<method name="__clone" access="public" version="1.0">
+				<title>Clone the linked list</title>
+				<description>Clones the linked list.</description>
+			</method>
+			
+			<method name="add" access="public" version="1.0">
+				<title>Add/insert a new value at the specified index</title>
+				<description>
+					<p>
+						Insert the value <parameter>newval</parameter> at the
+						specified <parameter>index</parameter>, shuffling the
+						previous value at that index (and all subsequent values)
+						up through the list.
+					</p>
+					<note>
+						This involves both seek operation as well as an insert
+						operation. Whilst in a linked list insert runs in Θ(1)
+						amortized time, the seek operation runs in Θ(n) meaning
+						this method also runs in Θ(n).
+					</note>
+				</description>
+				
+				<parameter type="int" name="index">The index where the new value is to be inserted. </parameter>
+				<parameter name="newval">The new value for the <parameter>index</parameter>.</parameter>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.add.php">SplDoublyLinkedList::add</link>
+				</see>
+			</method>
+			
+			<method name="bottom" access="public" version="1.0">
+				<title>Peeks at the node from the beginning of the singly linked list</title>
+				<description></description>
+				
+				<return>The value of the first node.</return>
+				<throws type="SEIDS::LinkedLists::CantPeekAtEmptyException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.bottom.php">SplDoublyLinkedList::bottom</link>
+				</see>
+			</method>
+			
+			<method name="count" access="public" version="1.0">
+				<title>Counts the number of elements in the singly linked list.</title>
+				<description></description>
+				
+				<return type="int">Returns the number of elements in the singly linked list.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.count.php">SplDoublyLinkedList::count</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/countable.count.php">Countable::count</link>
+				</see>
+			</method>
+			
+			<method name="current" access="public" version="1.0">
+				<title>Return current array entry</title>
+				<description>
+					Get the current singly linked list node.
+				</description>
+				
+				<return>The current node value.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.current.php">SplDoublyLinkedList::current</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.current.php">Iterator::current</link>
+				</see>
+			</method>
+			
+			<method name="getIteratorMode" access="public" version="1.0">
+				<title>Returns the mode of iteration</title>
+				<description></description>
+				
+				<return type="int">Returns the different modes and flags that affect the iteration.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.getiteratormode.php">SplDoublyLinkedList::getIteratorMode</link>
+				</see>
+			</method>
+			
+			<method name="isEmpty" access="public" version="1.0">
+				<title>Checks whether the singly linked list is empty</title>
+				<description></description>
+				
+				<return type="bool">Returns whether the singly linked list is empty.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.isempty.php">SplDoublyLinkedList::isEmpty</link>
+				</see>
+			</method>
+			
+			<method name="key" access="public" version="1.0">
+				<title>Return current node index</title>
+				<description>
+					This function returns the current node index.
+				</description>
+				
+				<return>The current node index.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.key.php">SplDoublyLinkedList::key</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.key.php">Iterator::key</link>
+				</see>
+			</method>
+			
+			<method name="move" access="public" version="1.0">
+				<title>Move an item from one index to another</title>
+				<description>
+					<p>
+						Moves the item at <parameter>offset_from</parameter> to
+						<parameter>offset_to</parameter> shuffling indexes as
+						necessary.
+					</p>
+					<note>
+						This is a slow method (Θ(n) amortized time) due to the
+						seek operations involved. As this is a singly linked
+						list it is slower to move an item down the list than it
+						is to move an item up.
+					</note>
+				</description>
+				
+				<parameter type="int" name="offset_from">The index of the item to be moved.</parameter>
+				<parameter type="int" name="offset_to">The index the item will be moved to.</parameter>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+			</method>
+			
+			<method name="next" access="public" version="1.0">
+				<title>Move to next entry</title>
+				<description>
+					Move the iterator to the next node.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.next.php">SplDoublyLinkedList::next</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.next.php">Iterator::next</link>
+				</see>
+			</method>
+			
+			<method name="offsetExists" access="public" version="1.0">
+				<title>Returns whether the requested index exists</title>
+				<description></description>
+				
+				<parameter type="int" name="index">The index being checked.</parameter>
+				<return type="bool"><constant>TRUE</constant> if the requested <parameter>index</parameter> exists, otherwise <constant>FALSE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.offsetexists.php">SplDoublyLinkedList::offsetExists</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetexists.php">ArrayAccess::offsetExists</link>
+				</see>
+			</method>
+			
+			<method name="offsetGet" access="public" version="1.0">
+				<title>Returns the value at the specified index</title>
+				<description>
+					<note>
+						This is a slow method (Θ(n) amortized time) due to the
+						seek operation involved.
+					</note>
+				</description>
+				
+				<parameter type="int" name="index">The index with the value.</parameter>
+				<return>The value at the specified <parameter>index</parameter>.</return>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.offsetget.php">SplDoublyLinkedList::offsetGet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetget.php">ArrayAccess::offsetGet</link>
+				</see>
+			</method>
+			
+			<method name="offsetSet" access="public" version="1.0">
+				<title>Sets a new value at a specified index</title>
+				<description>
+					<p>
+						Sets the value at the specified
+						<parameter>index</parameter> to
+						<parameter>newval</parameter>.
+					</p>
+					<note>
+						This is a slow method (Θ(n) amortized time) due to the
+						seek operation involved.
+					</note>
+				</description>
+				
+				<parameter type="int" name="index">The index being set.</parameter>
+				<parameter name="newval">The new value for the <parameter>index</parameter>.</parameter>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.offsetset.php">SplDoublyLinkedList::offsetSet</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetset.php">ArrayAccess::offsetSet</link>
+				</see>
+			</method>
+			
+			<method name="offsetUnset" access="public" version="1.0">
+				<title>Unsets the value at the specified index</title>
+				<description>
+					Unsets the value at the specified index.
+				</description>
+				
+				<parameter type="int" name="index">The index being unset.</parameter>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.offsetunset.php">SplDoublyLinkedList::offsetUnset</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/arrayaccess.offsetunset.php">ArrayAccess::offsetUnset</link>
+				</see>
+			</method>
+			
+			<method name="pop" access="public" version="1.0">
+				<title>Pops a node from the end of the singly linked list</title>
+				<description>
+					<note>
+						This is a slow method (Θ(n) amortized time) due to the
+						seek operation involved. The seek is required due to the
+						list being singly linked.
+					</note>
+				</description>
+				
+				<return>The value of the popped node.</return>
+				<throws type="SEIDS::LinkedLists::CantPopFromEmptyException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.pop.php">SplDoublyLinkedList::pop</link>
+				</see>
+			</method>
+			
+			<method name="prev" access="public" version="1.0">
+				<title>Move to previous entry</title>
+				<description>
+					Move the iterator to the previous node.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.prev.php">SplDoublyLinkedList::prev</link>
+				</see>
+			</method>
+			
+			<method name="push" access="public" version="1.0">
+				<title>Pushes an element at the end of the singly linked list</title>
+				<description>
+					Pushes <parameter>value</parameter> at the end of the
+					singly linked list.
+				</description>
+				
+				<parameter name="value">The value to push.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.push.php">SplDoublyLinkedList::push</link>
+				</see>
+			</method>
+			
+			<method name="remove" access="public" version="1.0">
+				<title>Remove/extract the item at the specified index</title>
+				<description>
+					<p>
+						Remove the item at the specified
+						<parameter>index</parameter>, shuffling the next value
+						(and all subsequent values) down through the list.
+					</p>
+					<note>
+						Similar to <method>LinkedList::add</method> this method
+						runs in Θ(n) amortized time due to the required seek
+						operation.
+					</note>
+				</description>
+				
+				<parameter type="int" name="offset">The index of the item to be removed.</parameter>
+				<return>The removed item.</return>
+				<throws type="SEIDS::LinkedLists::OutOfRangeException"><parameter>index</parameter> is out of bounds or when <parameter>index</parameter> cannot be parsed as an integer.</throws>
+			</method>
+			
+			<method name="rewind" access="public" version="1.0">
+				<title>Rewind iterator back to the start</title>
+				<description>
+					This rewinds the iterator to the beginning.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.rewind.php">SplDoublyLinkedList::rewind</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.rewind.php">Iterator::rewind</link>
+				</see>
+			</method>
+			
+			<method name="serialize" access="public" version="1.0">
+				<title>Serializes the storage</title>
+				<description>
+					<p>
+						Serializes the storage.
+					</p>
+					<warning>
+						This function is currently not documented; only its
+						argument list is available. It's use is discouraged.
+					</warning>
+				</description>
+				
+				<return type="string">The serialized string.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.serialize.php">SplDoublyLinkedList::serialize</link>
+				</see>
+				<see>
+					<method>LinkedList::unserialize</method>
+				</see>
+			</method>
+			
+			<method name="setIteratorMode" access="public" version="1.0">
+				<title>Sets the mode of iteration</title>
+				<description>
+					<note>
+						This method deviates from
+						<method>SplDoublyLinkedList::setIteratorMode</method> in
+						that it will not accept the LIFO flag.
+					</note>
+					<note>
+						The default mode is:
+						<constant>LinkedList::IT_MODE_KEEP</constant>
+					</note>
+				</description>
+				
+				<parameter type="int" name="mode">Either <constant>LinkedList::IT_MODE_DELETE</constant> (Elements are deleted by the iterator) or <constant>LinkedList::IT_MODE_KEEP</constant> (Elements are traversed by the iterator).</parameter>
+				<return type="int">The new iterator mode.</return>
+				<throws type="SEIDS::LinkedLists::ModeNotSupportedException">the LIFO flag is present in <parameter>mode</parameter>.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.setiteratormode.php">SplDoublyLinkedList::setIteratorMode</link>
+				</see>
+			</method>
+			
+			<method name="shift" access="public" version="1.0">
+				<title>Shifts a node from the beginning of the singly linked list</title>
+				<description></description>
+				
+				<return>The value of the shifted node.</return>
+				<throws type="SEIDS::LinkedLists::CantShiftFromEmptyException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.shift.php">SplDoublyLinkedList::shift</link>
+				</see>
+			</method>
+			
+			<method name="top" access="public" version="1.0">
+				<title>Peeks at the node from the end of the singly linked list</title>
+				<description></description>
+				
+				<return>The value of the last node.</return>
+				<throws type="SEIDS::LinkedLists::CantPeekAtEmptyException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.top.php">SplDoublyLinkedList::top</link>
+				</see>
+			</method>
+			
+			<method name="unserialize" access="public" version="1.0">
+				<title>Unserializes the storage</title>
+				<description>
+					<p>
+						Unserializes the storage, from
+						<method>LinkedList::serialize</method>
+					</p>
+					<warning>
+						This function is currently not documented; only its
+						argument list is available. It's use is discouraged.
+					</warning>
+				</description>
+				
+				<parameter type="string" name="serialized">The serialized string.</parameter>
+				<throws type="SEIDS::LinkedLists::UnserializeException">an error occurs.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.unserialize.php">SplDoublyLinkedList::unserialize</link>
+				</see>
+				<see>
+					<method>LinkedList::serialize</method>
+				</see>
+			</method>
+			
+			<method name="unshift" access="public" version="1.0">
+				<title>Prepends the singly linked list with an element</title>
+				<description>
+					Prepends <parameter>value</parameter> at the beginning of
+					the singly linked list. 
+				</description>
+				
+				<parameter name="value">The value to unshift.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.unshift.php">SplDoublyLinkedList::unshift</link>
+				</see>
+			</method>
+			
+			<method name="valid" access="public" version="1.0">
+				<title>Check whether the singly linked list contains more nodes</title>
+				<description>
+					Checks if the singly linked list contains any more nodes.
+				</description>
+				
+				<return type="bool">Returns <constant>TRUE</constant> if the singly linked list contains any more nodes, <constant>FALSE</constant> otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/spldoublylinkedlist.valid.php">SplDoublyLinkedList::valid</link>
+				</see>
+				<see>
+					<link href="http://php.net/manual/en/iterator.valid.php">Iterator::valid</link>
+				</see>
+			</method>
+			
+			<method name="moveToOffset" access="protected" version="1.0">
+				<title>Moves the internal iterator</title>
+				<description>
+					Moves the interal iterator (worker) to <parameter>offset</parameter>.
+				</description>
+				
+				<parameter type="int" name="offset">The index to move to.</parameter>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

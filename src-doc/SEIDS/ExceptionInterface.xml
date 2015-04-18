@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS">
+		<interface name="ExceptionInterface" version="1.0">
+			<description>
+				<p>
+					All classes thrown by this library are of classes that
+					implement this interface.
+				</p>
+				<p>
+					It is only intended that users should test for this
+					exception, when necessary, rather than throwing it in their
+					own code.
+				</p>
+			</description>
+		</interface>
+	</namespace>
+</apidoc>

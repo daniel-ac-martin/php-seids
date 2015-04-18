@@ -1,0 +1,813 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<set xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="index" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:phd="http://www.php.net/ns/phd">
+ <title>PHP SEIDS: Supplementary, Easily Interchangeable Data Structures</title>
+ <info>
+  <authorgroup xmlns="http://docbook.org/ns/docbook" xml:id="authors">
+   <author>
+    <personname>
+     <firstname>Daniel</firstname><surname>Martin</surname>
+    </personname>
+   </author>
+  </authorgroup>
+  <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
+  <copyright>
+   <year>2015-<?dbtimestamp format="Y"?></year>
+   <holder>Daniel Martin</holder>
+  </copyright>
+  <legalnotice xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="copyright">
+   <title>Copyright</title>
+   <simpara>
+    Copyright © 2015<!-- - <?dbtimestamp format="Y"?>--> by Daniel Martin, 1997 - 2015
+    by the PHP Documentation Group. This material may be distributed only
+    subject to the terms and conditions set forth in the Creative Commons
+    Attribution 3.0 License or later. A copy of the
+    <link linkend="cc.license">Creative Commons Attribution 3.0 license</link>
+    is distributed with this manual. The latest version is presently available
+    at
+    <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>.
+   </simpara>
+   <simpara>
+    If you are interested in redistribution or republishing of this document
+    in whole or in part, either modified or unmodified, and you have questions,
+    please contact the Copyright holders at
+    <link xlink:href="mailto:php-seids@dacm.org">php-seids@dacm.org</link>.
+    Note that this address is mapped to a publicly archived mailing list.
+   </simpara>
+  </legalnotice>
+ </info>
+
+ <book xml:id="manual">
+  <title>The PHP SEIDS Manual</title>
+
+  <preface xml:id="manual.preface">
+   <info>
+    <title>Preface</title>
+    <abstract>
+     <simpara>
+      PHP SEIDS (Supplementary, Easily Interchangeable Data Structures) is a
+      library providing a variety of data structures designed to complement
+      those provided by the Standard PHP Library (SPL). Wherever possible the
+      classes provide the same interface as provided by a related SPL class,
+      sometimes with extra functionality. This allows for the classes to be
+      easily swapped with both one another and the original SPL classes.
+     </simpara>
+     <simpara>
+      This work, "PHP SEIDS Manual", is a derivative of
+      "<link xlink:href="http://php.net/manual/en/index.php">PHP Manual</link>"
+      by the PHP Documentation Group, used under
+      <link xlink:href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</link>.
+      "PHP SEIDS Manual" is licensed under
+      <link xlink:href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</link>
+      by Daniel A.C. Martin.
+     </simpara>
+    </abstract>
+   </info>
+
+   <section xml:id="manual.preface.acknowledgements">
+    <title>Acknowledgements</title>
+    <para>
+     This manual borrows heavily from
+     <link xlink:href="http://php.net/manual/en/index.php">the original PHP
+     documentation</link>, and was built using the PHP project's DocBook
+     processor, <link xlink:href="http://doc.php.net/phd.php">PhD</link>. I
+     would like to express my thanks to all those who worked on these projects.
+     As well as to the authors of the
+     <link xlink:href="http://php.net/manual/en/book.spl.php">Standard PHP
+     Library (SPL)</link> which, of course, inspired the creation of this
+     library.
+    </para>
+    <para>
+     Daniel A.C. Martin, 2015.
+    </para>
+   </section>
+  </preface>
+ </book>
+
+ <article xml:id="getting-started">
+  <title>Getting Started</title>
+
+  <sect1 xml:id="getting-started.introduction">
+   <title>Introduction</title>
+   <para>
+    <acronym>PHP</acronym> <acronym>SEIDS</acronym> is a library providing a variety of data structures designed to
+    complement those provided by the Standard PHP Library (SPL). Wherever
+    possible the classes provide the same interface as provided by a related SPL
+    class, sometimes with extra functionality. This allows for the classes to be
+    easily swapped with both one another and the original SPL classes.
+   </para>
+   <para>
+    One should be aware that whilst these classes provide alternative
+    implementations to the SPL classes, and often extra functionality, they are
+    not fast. This is due to this library being implemented in PHP rather than C
+    as the original SPL classes are. For that reason it is generally better to
+    use the SPL classes if you know you do not need the extra functionality
+    provided here. The compatible interfaces of the classes makes this
+    transition very easy.
+   </para>
+   <para>
+    The most useful classes in this library are probably the
+    <link linkend="class.seids.arrays.dynamic.arraydeque">ArrayDeque</link>
+    class and the classes based on the
+    <link linkend="class.seids.heaps.pairing.heap">Pairing
+    Heap</link> (including
+    <link linkend="class.seids.heaps.pairing.priorityqueue">its
+    priority queue</link>).
+   </para>
+   <para>
+    The
+    <link linkend="class.seids.arrays.dynamic.arraydeque">ArrayDeque</link>
+    class is useful when one wants an array that only takes integers as keys and
+    takes up less space than standard arrays (the benefits provided by
+    <link xlink:href="http://php.net/manual/en/class.splfixedarray.php">SplFixedArray</link>)
+    but does not know before-hand how large the array must be or otherwise
+    wishes to automatically grow or shrink the array in the course of the
+    program.
+   </para>
+   <para>
+    The
+    <link linkend="class.seids.heaps.pairing.heap">Pairing
+    Heap</link> classes (and the associated
+    <link linkend="class.seids.heaps.pairing.priorityqueue">Priority
+    Queue</link> classes) are useful when one needs an updatable heap (or indeed
+    an updatable priority queue). If the ability to update the heap is not
+    required then one should use the faster binary heap implementation provided
+    by <link xlink:href="http://php.net/manual/en/class.splheap.php">SplHeap</link>.
+   </para>
+  </sect1>
+
+  <sect1 xml:id="getting-started.install">
+   <title>Installation</title>
+   <para>
+    The preferred installation method is via
+    <link xlink:href="https://getcomposer.org/">Composer</link>.
+   </para>
+   
+   <sect2 xml:id="getting-started.install.composer">
+    <title>Composer</title>
+    <para>
+     To install via Composer, first download Composer, if you have not already,
+     then simply run the following commands in your project's main directory:
+    </para>
+    <programlisting role="shell"><![CDATA[
+$ php ./path/to/composer.phar require daniel-ac-martin/php-seids
+$ php ./path/to/composer.phar install
+]]></programlisting>
+    <para>
+     The classes provided by this library can then be autoloaded using the
+     autoloader provided by Composer in "./vendor/autoload.php".
+    </para>
+   </sect2>
+   
+   <!--
+   <sect2 xml:id="getting-started.install.phar">
+    <title>Phar</title>
+    <para></para>
+   </sect2>
+   
+   <sect2 xml:id="getting-started.install.tarball">
+    <title>Tarball</title>
+    <para></para>
+   </sect2>
+   -->
+  </sect1>
+
+  <sect1 xml:id="getting-started.tutorials">
+   <title>Some simple tutorials</title>
+   <abstract>
+     <simpara>
+      Below are some simple tutorials on using the various types of
+      data structures provided by this library.
+     </simpara>
+   </abstract>
+
+   <sect2 xml:id="getting-started.tutorials.linkedlists">
+    <title>Linked Lists</title>
+
+    <para>
+     Let's say we have the following code relying on
+     <link xlink:href="http://php.net/manual/en/class.spldoublylinkedlist.php">SplDoublyLinkedList</link>:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+$ll = new SplDoublyLinkedList();
+
+$ll->push(2);
+$ll->push(3);
+$ll->unshift(5);
+
+foreach($ll as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+    <para>
+     Now let's say we would like to test whether a singly linked list would be
+     a better choice. After <link linkend="getting-started.install">installing
+     the library</link> we can switch to a singly linked list by making the
+     following changes to the code:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+// The following two lines have been added
+require 'vendor/autoload.php'; // The autoloader provided by composer
+use SEIDS\LinkedLists\Singly\LinkedList; // The singly linked list class
+
+// The following line has been changed
+$ll = new LinkedList();
+
+$ll->push(2);
+$ll->push(3);
+$ll->unshift(5);
+
+foreach($ll as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+    <para>
+     Both of these programs produce the same output:
+    </para>
+
+    <screen><![CDATA[
+5
+2
+3
+]]></screen>
+
+    <para>
+     Sadly, the end result of doing this is pretty disappointing as the singly
+     linked list offers less functionality in that it does not support the LIFO
+     iteration mode and runs around three times slower than
+     <link xlink:href="http://php.net/manual/en/class.spldoublylinkedlist.php">SplDoublyLinkedList</link>
+     for most operations, whilst consuming around three times as much memory,
+     making it one of the least useful classes in this library.
+    </para>
+   </sect2>
+
+   <sect2 xml:id="getting-started.tutorials.heaps">
+    <title>Heaps</title>
+
+    <para>
+     Let's say we have the following code relying on
+     <link xlink:href="http://php.net/manual/en/class.splmaxheap.php">SplMaxHeap</link>:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+$mh = new SplMaxHeap();
+
+$mh->insert(4);
+$mh->insert(1);
+$mh->insert(5);
+$mh->insert(2);
+$mh->insert(3);
+
+foreach($mh as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+    <para>
+     Now let's say we would like to be able to update items already in the heap,
+     which is not an operation supported by
+     <link xlink:href="http://php.net/manual/en/class.splmaxheap.php">SplMaxHeap</link>.
+     After <link linkend="getting-started.install">installing the library</link>
+     we can switch to an updatable heap by making the following changes to the
+     code:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+// The following two lines have been added
+require 'vendor/autoload.php'; // The autoloader provided by composer
+use SEIDS\Heaps\Pairing\MaxHeap; // The pairing, max-heap class
+
+// The following line has been changed
+$mh = new MaxHeap();
+
+$mh->insert(4);
+$mh->insert(1);
+$mh->insert(5);
+$mh->insert(2);
+$mh->insert(3);
+
+foreach($mh as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+    <para>
+     Both of these programs produce the same output:
+    </para>
+
+    <screen><![CDATA[
+5
+4
+3
+2
+1
+]]></screen>
+    
+    <para>
+     At this point we have only succeeded in slowing down our program a little.
+     (Though for a heap of this size the difference would be imperceptible.) We
+     do now have access to an
+     <link linkend="seids.heaps.pairing.heap.update">update method</link>
+     which can be utilised as follows:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+require 'vendor/autoload.php'; // The autoloader provided by composer
+use SEIDS\Heaps\Pairing\MaxHeap; // The pairing, max-heap class
+
+$mh = new MaxHeap();
+
+$mh->insert(4);
+$mh->insert(1);
+$mh->insert(5);
+$mh->insert(2);
+$mh->insert(3);
+
+$mh_clone = clone $mh; // Use a clone as iterating removes items from the heap
+
+foreach($mh_clone as $item) echo $item."\n";
+
+echo "\nBecomes:\n";
+
+$mh->update(2, 7); // Update a '2' in the heap to a '7'
+$mh->update(4, 9); // Update a '4' in the heap to a '9'
+
+foreach($mh as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+    <para>
+     Which gives the following output:
+    </para>
+
+    <screen><![CDATA[
+5
+4
+3
+2
+1
+
+Becomes:
+9
+7
+5
+3
+1
+]]></screen>
+
+    <sect3 xml:id="getting-started.tutorials.heaps.priorityqueues">
+     <title>Priority Queues</title>
+
+     <para>
+      Similarly, we can move from a priority queue based on
+      <link xlink:href="http://php.net/manual/en/class.splpriorityqueue.php">SplPriorityQueue</link>
+      to an updatable priority queue based on an updatable heap.
+     </para>
+
+     <para>
+      Let us suppose we have the following code:
+     </para>
+
+     <programlisting role="php"><![CDATA[
+<?php
+$pq = new SplPriorityQueue();
+
+$pq->insert('three', 3);
+$pq->insert('one', 1);
+$pq->insert('five', 5);
+$pq->insert('four', 4);
+$pq->insert('two', 2);
+
+foreach($pq as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+     <para>
+      Which gives the following output:
+     </para>
+
+     <screen><![CDATA[
+five
+four
+three
+two
+one
+]]></screen>
+
+     <para>
+      We can update the priority queue to reorder the items in the queue by
+      making following changes:
+     </para>
+
+     <programlisting role="php"><![CDATA[
+<?php
+// The following two lines have been added
+require 'vendor/autoload.php'; // The autoloader provided by composer
+use SEIDS\Heaps\Pairing\PriorityQueue; // The pairing, priority queue class
+
+// The following line has been changed
+$pq = new PriorityQueue();
+
+$pq->insert('three', 3);
+$pq->insert('one', 1);
+$pq->insert('five', 5);
+$pq->insert('four', 4);
+$pq->insert('two', 2);
+
+$pq_clone = clone $pq; // Use a clone as iterating removes items from the queue
+
+foreach($pq_clone as $item) echo $item."\n";
+
+echo "\nBecomes:\n";
+
+$pq->update('one', 5);
+$pq->update('two', 4);
+$pq->update('four', 2);
+$pq->update('five', 1);
+
+foreach($pq as $item) echo $item."\n";
+?>
+]]></programlisting>
+
+     <para>
+      Which gives us the following output:
+     </para>
+
+     <screen><![CDATA[
+five
+four
+three
+two
+one
+
+Becomes:
+one
+two
+three
+four
+five
+]]></screen>
+
+     <para>
+      Again, it is important to realise that we have paid a performance penalty
+      for the ability to update, in the forms of both execution speed and memory
+      consumption.
+     </para>
+    </sect3>
+   </sect2>
+
+   <sect2 xml:id="getting-started.tutorials.arrays">
+    <title>Arrays</title>
+
+    <para>
+     Let us suppose that we have some data that we wish to store in a linear
+	    array. We could simply use the standard PHP arrays. Take the following code
+     for example:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+$arr = array();
+
+$arr[] = 'a';
+$arr[] = 'b';
+$arr[] = 'C';
+$arr[] = 'd';
+$arr[] = 'e';
+
+echo middle($arr)."\n";
+
+function middle($arr)
+{
+ $N = count($arr);
+ return $N ? $arr[(int)(($N - 1) / 2)] : null;
+}
+
+?>
+]]></programlisting>
+
+    <para>
+     Which gives the following output:
+    </para>
+
+    <screen><![CDATA[
+C
+]]></screen>
+
+    <para>
+     There is a problem with this though. The function middle() assumes that its
+     argument is an array that takes integer keys and that the keys are numbered
+     from zero to 'one less than the size of the array'. Standard PHP arrays do not
+     guarantee this as they are in fact hash maps, and can take keys of any
+     type. For this reason it is convenient to use the
+     <link linkend="class.seids.arrays.dynamic.arraydeque">ArrayDeque</link>
+     class instead:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+// The following two lines have been added
+require 'vendor/autoload.php'; // The autoloader provided by composer
+use SEIDS\Arrays\Dynamic\ArrayDeque;
+
+// The following line has been changed
+$arr = new ArrayDeque();
+
+$arr[] = 'a';
+$arr[] = 'b';
+$arr[] = 'C';
+$arr[] = 'd';
+$arr[] = 'e';
+
+echo middle($arr)."\n";
+
+// The following line has been changed
+function middle(ArrayDeque $arr)
+{
+ $N = count($arr);
+ return $N ? $arr[(int)(($N - 1) / 2)] : null;
+}
+
+?>
+]]></programlisting>
+
+    <para>
+     Not only does this help us to ensure the correctness of our program but
+     also, in the case of large arrays, less memory is consumed. Although, we do
+     pay a penalty in terms of speed. This penalty can be reduced by switching
+     to the
+     <link linkend="class.seids.arrays.dynamic.dynamicarray">DynamicArray</link>
+     class, though this comes at the cost of the ability to grow and shrink from
+     the start of the array and not just the end. i.e. The shift() and unshift()
+     methods.
+    </para>
+
+    <para>
+     In fact, we can reclaim this loss of performance provided we always know
+     the size of the array before we build it, and therefore have no need to
+     automatically grow the array. We can do so by switching to the
+     <link xlink:href="http://php.net/manual/en/class.splfixedarray.php">SplFixedArray</link>
+     class:
+    </para>
+
+    <programlisting role="php"><![CDATA[
+<?php
+// Two redundant lines deleted
+
+// The following line has been changed
+$arr = new SplFixedArray(5);
+
+// The following lines now have explicit indexes
+$arr[0] = 'a';
+$arr[1] = 'b';
+$arr[2] = 'C';
+$arr[3] = 'd';
+$arr[4] = 'e';
+
+echo middle($arr)."\n";
+
+// The following line has been changed
+function middle(SplFixedArray $arr)
+{
+ $N = count($arr);
+ return $N ? $arr[(int)(($N - 1) / 2)] : null;
+}
+
+?>
+]]></programlisting>
+
+    <para>
+     The
+     <link linkend="class.seids.arrays.dynamic.arraydeque">ArrayDeque</link>
+     and
+     <link linkend="class.seids.arrays.dynamic.dynamicarray">DynamicArray</link>
+     classes therefore represent 'half-way houses' between standard PHP arrays
+     and the
+     <link xlink:href="http://php.net/manual/en/class.splfixedarray.php">SplFixedArray</link>
+     class.
+    </para>
+   </sect2>
+  </sect1>
+ </article>
+
+ <article xml:id="datastructures">
+  <title>Data Structures</title>
+  <abstract>
+   <para>
+    This library provides a set of standard data structures. They are grouped
+    here by their underlying implementation which usually defines their general
+    field of application.
+   </para>
+
+   <section>
+    <title>Singly Linked Lists</title>
+
+    <para>
+     A Singly Linked List (SLL) is a list of nodes linked in one direction to 
+     each other. Iterator's operations, access to both ends, addition or 
+     removal of nodes have a cost of O(1) when the underlying structure is a
+     SLL. It hence provides a decent implementation for stacks and queues.
+    </para>
+
+    <itemizedlist>
+     <listitem>
+      <simpara><classname>SEIDS::LinkedLists::Singly::LinkedList</classname></simpara>
+      <itemizedlist>
+       <listitem><simpara><classname>SEIDS::LinkedLists::Singly::Stack</classname></simpara></listitem>
+       <listitem><simpara><classname>SEIDS::LinkedLists::Singly::Queue</classname></simpara></listitem>
+      </itemizedlist>
+     </listitem>
+    </itemizedlist>
+   </section>
+
+   <section>
+    <title>Heaps</title>
+
+    <para>
+     Heaps are tree-like structures that follow the heap-property: each node
+     is greater than or equal to its children, when compared using the 
+     implemented compare method which is global to the heap.
+    </para>
+
+    <sect2>
+     <title>Binary Heap</title>
+
+     <itemizedlist>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Binary::Heap</classname></simpara>
+       <itemizedlist>
+        <listitem><simpara><classname>SEIDS::Heaps::Binary::MaxHeap</classname></simpara></listitem>
+        <listitem><simpara><classname>SEIDS::Heaps::Binary::MinHeap</classname></simpara></listitem>
+       </itemizedlist>
+      </listitem>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Binary::PriorityQueue</classname></simpara>
+      </listitem>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Binary::MinPriorityQueue</classname></simpara>
+      </listitem>
+     </itemizedlist>
+    </sect2>
+
+    <sect2>
+     <title>Pairing Heap</title>
+
+     <itemizedlist>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Pairing::Heap</classname></simpara>
+       <itemizedlist>
+        <listitem><simpara><classname>SEIDS::Heaps::Pairing::MaxHeap</classname></simpara></listitem>
+        <listitem><simpara><classname>SEIDS::Heaps::Pairing::MinHeap</classname></simpara></listitem>
+       </itemizedlist>
+      </listitem>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Pairing::PriorityQueue</classname></simpara>
+      </listitem>
+      <listitem>
+       <simpara><classname>SEIDS::Heaps::Pairing::MinPriorityQueue</classname></simpara>
+      </listitem>
+     </itemizedlist>
+    </sect2>
+   </section>
+
+   <section>
+    <title>Arrays</title>
+
+    <para>
+     Arrays are structures that store the data in a continuous way, accessible
+     via indexes. Don't confuse them with PHP arrays: PHP arrays are in fact 
+     implemented as ordered hashtables.
+    </para>
+
+    <itemizedlist>
+     <listitem>
+      <simpara><classname>SEIDS::Arrays::Dynamic::DynamicArray</classname></simpara>
+     </listitem>
+     <listitem>
+      <simpara><classname>SEIDS::Arrays::Dynamic::ArrayDeque</classname></simpara>
+     </listitem>
+    </itemizedlist>
+   </section>
+  </abstract>
+
+  <!-- Linked Lists -->
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.singly.linkedlist'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.singly.stack'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.singly.queue'))" />
+
+  <!-- Heaps - Binary -->
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.heap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.maxheap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.minheap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.priorityqueue'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.minpriorityqueue'))" />
+
+  <!-- Heaps - Pairing -->
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.heap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.maxheap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.minheap'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.priorityqueue'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.minpriorityqueue'))" />
+
+  <!-- Arrays -->
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.dynamic.dynamicarray'))" />
+  <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.dynamic.arraydeque'))" />
+ </article>
+
+ <book xml:id="appendices">
+  <title>Appendices</title>
+  
+  <xi:include href="dist/types.xml" parse="xml" />
+  
+  <appendix xmlns="http://docbook.org/ns/docbook" xml:id="appendix.misc">
+   <title>Miscellaneous Interfaces and Classes</title>
+   <para>
+    These interfaces and classes are used by and/or inherited from the main
+    classes in this library. They are specified here for the sake of
+    completeness. They are not intended for public consumption and their API's
+    are liable to change without notice.
+   </para>
+   
+   <!-- [Global] -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.exceptioninterface'))" />
+   <!-- Arrays -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.cantpopfromemptyexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.cantshiftfromemptyexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.exceptioninterface'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.invalidargumentexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.arrays.invalidindexexception'))" />
+   <!-- Heaps -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.constructorexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.exceptioninterface'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.extractexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.heap'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.minpriorityqueue'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.peekexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.priorityqueue'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.priorityqueueheapitem'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.recoverexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.updateexception'))" />
+   <!-- Heaps/Binary -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.item'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.binary.priorityqueueheap'))" />
+   <!-- Heaps/Pairing -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.priorityqueueheap'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.heaps.pairing.subheap'))" />
+   <!-- LinkedLists -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.cantpeekatemptyexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.cantpopfromemptyexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.cantshiftfromemptyexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.exceptioninterface'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.modenotsupportedexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.outofrangeexception'))" />
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.unserializeexception'))" />
+   <!-- LinkedLists/Singly -->
+   <xi:include href="../build/doc/apidoc.phpnet.xml" parse="xml" xpointer="xpointer(id('class.seids.linkedlists.singly.item'))" />
+  </appendix>
+
+  <xi:include href="dist/license.xml" parse="xml" />
+
+  <!--
+  <appendix xmlns="http://docbook.org/ns/docbook" xml:id="doc.changelog">
+   <title>Changelog</title>
+    <para>
+     The following changes have been made to functions of bundled extensions.
+    </para>
+    <?phpdoc changelog-config-since="1.0.0" ?>
+    <?phpdoc generate-changelog-for-membership="core bundled bundledexternal" ?>
+   </appendix>
+   -->
+ </book>
+</set>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+indent-tabs-mode:nil
+sgml-parent-document:nil
+sgml-default-dtd-file:"~/.phpdoc/manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+vim600: syn=xml fen fdm=syntax fdl=2 si
+vim: et tw=78 syn=sgml
+vi: ts=1 sw=1
+-->

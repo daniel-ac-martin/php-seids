@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::LinkedLists::Singly">
+		<class name="Queue" version="1.0">
+			<extends>LinkedList</extends>
+			
+			<description>
+				<p>
+					The Queue class provides the main functionalities of a queue
+					implemented using a singly linked list.
+				</p>
+				<p>
+					It provides the interface as SplQueue and can therefore be
+					used as a drop-in replacement.
+				</p>
+				<p>
+					Please note that as this is implemented in PHP it will
+					probably be slower in practice than <class>SplQueue</class>
+					(which is implemented in C). It is therefore only
+					recommended for experimental purposes.
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splqueue.php">The SplQueue class</link>
+			</see>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new queue implemented using a singly linked list</title>
+				<description>
+					This constructs a new empty queue.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splqueue.construct.php">SplQueue::__construct</link>
+				</see>
+				
+				<example>
+					<title>Queue::__construct() example</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\LinkedLists\Singly\Queue;
+
+$q = new Queue();
+
+$q[] = 1;
+$q[] = 2;
+$q[] = 3;
+
+foreach ($q as $elem)  {
+ echo $elem."\n";
+}
+?>
+]]></code>
+					<gives><![CDATA[
+1
+2
+3
+]]></gives>
+				</example>
+			</constructor>
+			
+			<method name="dequeue" access="public" version="1.0">
+				<title>Dequeues a node from the queue</title>
+				<description>
+					<p>
+						Dequeues a value from the top of the queue.
+					</p>
+					<note>
+						<method>Queue::dequeue</method> is an alias of
+						<method>LinkedList::shift</method>.
+					</note>
+				</description>
+				
+				<return>The value of the dequeued node.</return>
+				<throws type="SEIDS::LinkedLists::CantShiftFromEmptyException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splqueue.dequeue.php">SplQueue::dequeue</link>
+				</see>
+			</method>
+			
+			<method name="enqueue" access="public" version="1.0">
+				<title>Adds an element to the queue</title>
+				<description>
+					<p>
+						Enqueues <parameter>value</parameter> at the end of the
+						queue.
+					</p>
+					<note>
+						<method>Queue::enqueue</method> is an alias of
+						<method>LinkedList::push</method>.
+					</note>
+				</description>
+				
+				<parameter name="value">The value to enqueue.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splqueue.enqueue.php">SplQueue::enqueue</link>
+				</see>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

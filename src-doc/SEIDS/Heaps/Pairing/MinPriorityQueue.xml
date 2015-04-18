@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Pairing">
+		<class name="MinPriorityQueue" version="1.0">
+			<extends>SEIDS::Heaps::MinPriorityQueue</extends>
+			
+			<title>A min-priority queue class based on a pairing heap</title>
+			<description>
+				<p>
+					This class provides the main functionalities of a
+					prioritized queue, implemented using a pairing, min-heap.
+				</p>
+				<p>
+					It provides the same interface as
+					<class>SplPriorityQueue</class> with the extra method,
+					<method>PriorityQueue::update</method> which allows one to
+					change the priority of a node in the queue.
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splpriorityqueue.php">The SplPriorityQueue class</link>
+			</see>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new empty queue</title>
+				<description>
+					This constructs a new empty queue.
+				</description>
+				
+				<see>
+					<link href="http://php.net/manual/en/splpriorityqueue.construct.php">SplPriorityQueue::__construct</link>
+				</see>
+			</constructor>
+		</class>
+	</namespace>
+</apidoc>

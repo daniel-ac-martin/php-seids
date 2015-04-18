@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// apidoc
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+//===========================================================================-->
+<!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "http://www.docbook.org/xml/5.0/dtd/docbook.dtd">
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="language.types">
+  <title>Types</title>
+  <sect1 xml:id="language.types.intro">
+    <title>Introduction</title>
+    <simpara>
+   PHP supports eight primitive types.
+  </simpara>
+    <para>
+   Four scalar types:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+     <type>boolean</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>integer</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>float</type> (floating-point number)
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>string</type>
+    </simpara>
+      </listitem>
+    </itemizedlist>
+    <para>
+   Two compound types:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+     <type>array</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>object</type>
+    </simpara>
+      </listitem>
+    </itemizedlist>
+    <para>
+   And finally two special types:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+     <type>resource</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>NULL</type>
+    </simpara>
+      </listitem>
+    </itemizedlist>
+    <para>
+   This manual also introduces some
+   <link linkend="language.pseudo-types">pseudo-types</link> for readability
+   reasons:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+     <type>mixed</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>number</type>
+    </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+     <type>callback</type>
+    </simpara>
+      </listitem>
+    </itemizedlist>
+    <para>
+   And the pseudo-variable <parameter>$...</parameter>.
+  </para>
+    <simpara>
+   The type of a variable is not usually set by the programmer; rather, it is
+   decided at runtime by PHP depending on the context in which that variable is
+   used.
+  </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.boolean" xml:base="types/boolean.xml">
+    <title>Booleans</title>
+    <simpara>
+  This is the simplest type. A <type>boolean</type> expresses a truth value. It
+  can be either <constant>TRUE</constant> or <constant>FALSE</constant>.
+ </simpara>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.boolean.php">Booleans</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.integer" xml:base="types/integer.xml">
+    <title>Integers</title>
+    <simpara>
+  An <type>integer</type> is a number of the set
+  ℤ = {..., -2, -1, 0, 1, 2, ...}.
+ </simpara>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.integer.php">Integers</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.float" xml:base="types/float.xml">
+    <title>Floating point numbers</title>
+    <para>
+  Floating point numbers (also known as "floats", "doubles", or "real numbers")
+  can be specified using any of the following syntaxes:
+ </para>
+    <informalexample>
+      <programlisting role="php">
+<![CDATA[
+<?php
+$a = 1.234; 
+$b = 1.2e3; 
+$c = 7E-10;
+?>
+]]>
+  </programlisting>
+    </informalexample>
+    <para>
+  Formally:
+ </para>
+    <informalexample>
+      <programlisting>
+<![CDATA[
+LNUM          [0-9]+
+DNUM          ([0-9]*[\.]{LNUM}) | ({LNUM}[\.][0-9]*)
+EXPONENT_DNUM [+-]?(({LNUM} | {DNUM}) [eE][+-]? {LNUM})
+]]>
+  </programlisting>
+    </informalexample>
+    <para>
+  The size of a float is platform-dependent, although a maximum of ~1.8e308 with
+  a precision of roughly 14 decimal digits is a common value (the 64 bit IEEE
+  format).
+ </para>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.float.php">Floating point numbers</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.string" xml:base="types/string.xml">
+    <title>Strings</title>
+    <para>
+  A <type>string</type> is series of characters, where a character is
+  the same as a byte. This means that PHP only supports a 256-character set,
+  and hence does not offer native Unicode support.
+ </para>
+    <note>
+      <simpara>
+   <type>string</type> can be as large as up to 2GB (2147483647 bytes maximum)
+  </simpara>
+    </note>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.string.php">Strings</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.array" xml:base="types/array.xml">
+    <title>Arrays</title>
+    <para>
+  An <type>array</type> in PHP is actually an ordered map. A map is a type that
+  associates <emphasis>values</emphasis> to <emphasis>keys</emphasis>. This type
+  is optimized for several different uses; it can be treated as an array,
+  list (vector), hash table (an implementation of a map), dictionary,
+  collection, stack, queue, and probably more. As <type>array</type> values can
+  be other <type>array</type>s, trees and multidimensional <type>array</type>s
+  are also possible.
+ </para>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.array.php">Arrays</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.object" xml:base="types/object.xml">
+    <title>Objects</title>
+    <para>
+   To create a new <type>object</type>, use the <literal>new</literal> statement
+   to instantiate a class:
+  </para>
+    <informalexample>
+      <programlisting role="php">
+<![CDATA[
+<?php
+class foo
+{
+    function do_foo()
+    {
+        echo "Doing foo."; 
+    }
+}
+
+$bar = new foo;
+$bar->do_foo();
+?>
+]]>
+   </programlisting>
+    </informalexample>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.object.php">Objects</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.resource" xml:base="types/resource.xml">
+    <title>Resources</title>
+    <para>
+  A <type>resource</type> is a special variable, holding a reference to an
+  external resource. Resources are created and used by special functions.
+ </para>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.resource.php">Resources</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.null" xml:base="types/null.xml">
+    <title>NULL</title>
+    <para>
+  The special <constant>NULL</constant> value represents a variable with no value. <constant>NULL</constant> is the
+  only possible value of type <type>null</type>.
+ </para>
+    <para>
+  A variable is considered to be <type>null</type> if:
+ </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+    it has been assigned the constant <constant>NULL</constant>.
+   </para>
+      </listitem>
+      <listitem>
+        <para>
+    it has not been set to any value yet.
+   </para>
+      </listitem>
+      <listitem>
+        <para>
+    it has been <function>unset</function>.
+   </para>
+      </listitem>
+    </itemizedlist>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.null.php">NULL</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.types.callable" xml:base="types/callable.xml">
+    <title>Callbacks</title>
+    <para>
+  Callbacks can be denoted by <type>callable</type> type hint as of PHP 5.4.
+  This documentation used <type>callback</type> type information for the same
+  purpose.
+ </para>
+    <para>
+  Some functions like <function>call_user_func</function> or
+  <function>usort</function> accept user-defined callback functions as a
+  parameter. Callback functions can not only be simple functions, but also
+  <type>object</type> methods, including static class methods.
+ </para>
+    <simpara>
+    See also <link xlink:href="http://php.net/manual/en/language.types.callable.php">Callbacks / Callables</link>.
+   </simpara>
+  </sect1>
+  <sect1 xml:id="language.pseudo-types" xml:base="types/pseudo-types.xml">
+    <title>Pseudo-types and variables used in this documentation</title>
+    <sect2 xml:id="language.types.mixed">
+      <title>mixed</title>
+      <para>
+   <literal>mixed</literal> indicates that a parameter may accept multiple (but
+   not necessarily all) types.
+  </para>
+      <para>
+   <function>gettype</function> for example will accept all PHP types, while
+   <function>str_replace</function> will accept <type>string</type>s and
+   <type>array</type>s.
+  </para>
+    </sect2>
+    <sect2 xml:id="language.types.number">
+      <title>number</title>
+      <para>
+   <literal>number</literal> indicates that a parameter can be either
+   <type>integer</type> or <type>float</type>.
+  </para>
+    </sect2>
+    <sect2 xml:id="language.types.callback">
+      <title>callback</title>
+      <para>
+   <type>callback</type> pseudo-types was used in this documentation before
+   <type>callable</type> type hint was introduced by PHP 5.4. It means exactly
+   the same.
+  </para>
+    </sect2>
+    <sect2 xml:id="language.types.void">
+      <title>void</title>
+      <para>
+   <literal>void</literal> as a return type means that the return value is
+   useless. <literal>void</literal> in a parameter list means that the function
+   doesn't accept any parameters.
+  </para>
+    </sect2>
+    <sect2 xml:id="language.types.dotdotdot">
+      <title>...</title>
+      <para>
+   <parameter>$...</parameter> in function prototypes means
+   <literal>and so on</literal>. This variable name is used when a function can
+   take an endless number of arguments.
+  </para>
+    </sect2>
+  </sect1>
+</chapter>

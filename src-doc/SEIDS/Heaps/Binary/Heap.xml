@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Binary">
+		<class name="Heap" version="1.0">
+			<extends>SEIDS::Heaps::Heap</extends>
+			
+			<title>A binary heap class</title>
+			<description>
+				<p>
+					This class provides the main functionalities of a Heap. The
+					underlying implementation is a binary heap.
+				</p>
+				<p>
+					It provides the same interface as <class>SplHeap</class>
+					with the extra methods, <method>Heap::extractInsert</method>
+					and <method>Heap::update</method> which allows one to update
+					a node in the heap.
+				</p>
+				<p>
+					This class has just one abstract method,
+					<method>Heap::compare</method>, that must by overloaded to
+					use the heap. Those who are working with simple numerical
+					data can used the concrete classes <class>MaxHeap</class>
+					and <class>MinHeap</class> for a binary max-heap and binary
+					min-heap respectively.
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/spl.datastructures.php">The SplHeap class</link>
+			</see>
+			<see>
+				<link href="https://en.wikipedia.org/wiki/Binary_heap">Binary heap, Wikipedia entry</link>
+			</see>
+			<see>
+				<class>MaxHeap</class>
+				<description>A binary max-heap class</description>
+			</see>
+			<see>
+				<class>MinHeap</class>
+				<description>A binary min-heap class</description>
+			</see>
+			<see>
+				<method>Heap::hashtIndex</method>
+			</see>
+			
+			<property name="btree" type="array" access="protected" version="1.0">
+				The binary tree which represents the heap.
+			</property>
+			<property name="hasht" type="array" access="protected" version="1.0">
+				A hash table (standard PHP array) which takes node values (as
+				given by <method>Heap::hashtIndex</method>) as keys and gives a
+				list of indexes (in <parameter>btree</parameter>) and tags for
+				nodes corresponding to that value. Used to efficiently update
+				the heap.
+			</property>
+			<property name="last_tag" type="int" access="protected" version="1.0">
+				The last tag used for a node.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new heap</title>
+				<description>
+					This constructs a new heap. If no argument is supplied the
+					heap will be empty.
+				</description>
+				
+				<parameter type="array" name="array" optional="yes">An array of value to initialise the heap with.</parameter>
+				<throws type="SEIDS::Heaps::ConstructorException"><parameter>array</parameter> is not an array.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.construct.php">SplHeap::__construct</link>
+				</see>
+			</constructor>
+			
+			<method name="compare" access="protected" abstract="yes" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>value1</parameter> with
+						<parameter>value2</parameter>.
+					</p>
+					<note>
+						Having multiple elements with the same value in a Heap
+						is not recommended. They will end up in an arbitrary
+						relative position.
+					</note>
+					<warning>
+						Throwing exceptions in <method>Heap::compare</method>
+						can corrupt the Heap and place it in a blocked state.
+						You can unblock it by calling
+						<method>Heap::recoverFromCorruption</method>. However,
+						some elements might not be placed correctly and it may
+						hence break the heap-property.
+					</warning>
+				</description>
+				
+				<parameter name="value1">The value of the first node being compared.</parameter>
+				<parameter name="value2">The value of the second node being compared.</parameter>
+				<return type="int">Result of the comparison, positive integer if <parameter>value1</parameter> is greater than <parameter>value2</parameter>, <literal>0</literal> if they are equal, negative integer otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.compare.php">SplHeap::compare</link>
+				</see>
+			</method>
+			
+			<method name="extract" access="public" version="1.0">
+				<title>Extracts a node from top of the heap</title>
+				<description>
+					Extracts a node from top of the heap and sifts up. Runs in
+					Θ(log(n)) amortized time, where n is the size of the heap.
+				</description>
+				
+				<return>The value of the extracted node.</return>
+				<throws type="SEIDS::Heaps::ExtractException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.extract.php">SplHeap::extract</link>
+				</see>
+			</method>
+			
+			<method name="extractInsert" access="public" version="1.0">
+				<title>Extracts a node from top of the heap and inserts a new one</title>
+				<description>
+					Extracts a node from top of the heap, inserts
+					<parameter>value</parameter> and sifts up. Runs in Θ(log(n))
+					amortized time, where n is the size of the heap. Faster than
+					extracting and inserting separately.
+				</description>
+				
+				<parameter name="value">The value to insert.</parameter>
+				<return>The value of the extracted node.</return>
+				<throws type="SEIDS::Heaps::ExtractException">the data-structure is empty.</throws>
+			</method>
+			
+			<method name="insert" access="public" version="1.0">
+				<title>Inserts an element in the heap</title>
+				<description>
+					Insert <parameter>value</parameter> in the heap by sifting
+					it up. Runs in Θ(log(n)) amortized time, where n is the size
+					of the heap.
+				</description>
+				
+				<parameter name="value">The value to insert.</parameter>
+				<return type="bool"><constant>TRUE</constant>.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.insert.php">SplHeap::insert</link>
+				</see>
+			</method>
+			
+			<method name="recoverFromCorruption" access="public" version="1.0">
+				<title>Recover from the corrupted state</title>
+				<description>
+					<p>
+						Recover from the corrupted state and allow further
+						actions on the heap.
+					</p>
+					<note>
+						This function is undocumented in the SPL. It is provided
+						mainly for API compatibility. It may not function in the
+						same way as
+						<method>SplHeap::recoverFromCorruption</method>.
+					</note>
+				</description>
+				
+				<return type="bool"><constant>TRUE</constant>.</return>
+				<throws type="SEIDS::Heaps::RecoverException">unable to recover the heap.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.recoverfromcorruption.php">SplHeap::recoverFromCorruption</link>
+				</see>
+			</method>
+			
+			<method name="top" access="public" version="1.0">
+				<title>Peeks at the node from the top of the heap</title>
+				<description>
+					Returns the value at the top of the heap without removing
+					it. Runs in Θ(1) amortized time.
+				</description>
+				
+				<return>The value of the node on the top.</return>
+				<throws type="SEIDS::Heaps::PeekException">the data-structure is empty.</throws>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.top.php">SplHeap::top</link>
+				</see>
+			</method>
+			
+			<method name="update" access="public" version="1.0">
+				<title>Updates a node in the heap to a new value</title>
+				<description>
+					<p>
+						Updates a node in the heap from its current value to a
+						new value, <parameter>value2</parameter>. Where the
+						current value is given by executing
+						<method>Heap::value</method> on
+						<parameter>value1</parameter>.
+					</p>
+					<p>
+						If two nodes in the heap have the same value then only
+						one will be changed.
+					</p>
+					<note>
+						Runs in Θ(log(n)), where n is the size of the heap.
+					</note>
+				</description>
+				
+				<parameter name="value1">The current value.</parameter>
+				<parameter name="value2">The new value.</parameter>
+				<throws type="SEIDS::Heaps::UpdateException"><parameter>value1</parameter> is not in the heap.</throws>
+				
+				<example>
+					<title>Heap::update example (using a max-heap)</title>
+					<code><![CDATA[
+<?php
+require 'vendor/autoload.php'; // A PSR-4 or PSR-0 autoloader
+use SEIDS\Heaps\Binary\MaxHeap;
+
+$mh = new MaxHeap();
+
+$mh->insert(1);
+$mh->insert(2);
+$mh->insert(3);
+$mh->insert(4);
+$mh->insert(5);
+
+$mh2 = clone $mh;
+
+$mh->update(2, 6);
+$mh->update(4, 0);
+
+foreach ($mh2 as $v) {
+ var_dump($v);
+}
+
+echo "\n";
+
+foreach ($mh as $v) {
+ var_dump($v);
+}
+
+?>
+]]></code>
+					<gives><![CDATA[
+int(5)
+int(4)
+int(3)
+int(2)
+int(1)
+
+int(6)
+int(5)
+int(3)
+int(1)
+int(0)
+]]></gives>
+				</example>
+			</method>
+			
+			<method name="parentIndex" access="protected" version="1.0">
+				<title>Returns the index of the parent</title>
+				<description>
+					Returns the index of the parent of the node referred to by
+					the index, <parameter>index</parameter>, in the binary tree.
+				</description>
+				
+				<parameter type="int" name="index">The index to be queried.</parameter>
+				<return type="int">The index of the parent or <constant>NULL</constant> if none exists.</return>
+			</method>
+			
+			<method name="childOneIndex" access="protected" version="1.0">
+				<title>Returns the index of the first child</title>
+				<description>
+					Returns the index of the first child of the node referred to
+					by the index, <parameter>index</parameter>, in the binary
+					tree.
+				</description>
+				
+				<parameter type="int" name="index">The index to be queried.</parameter>
+				<return type="int">The index of the first child or <constant>NULL</constant> if none exists.</return>
+			</method>
+			
+			<method name="childTwoIndex" access="protected" version="1.0">
+				<title>Returns the index of the second child</title>
+				<description>
+					Returns the index of the second child of the node referred
+					to by the index, <parameter>index</parameter>, in the binary
+					tree.
+				</description>
+				
+				<parameter type="int" name="index">The index to be queried.</parameter>
+				<return type="int">The index of the second child or <constant>NULL</constant> if none exists.</return>
+			</method>
+			
+			<method name="swap" access="protected" version="1.0">
+				<title>Swap two nodes in the binary tree</title>
+				<description>
+					Swaps around the nodes in the binary tree referred to by the
+					indexes, <parameter>a</parameter> and
+					<parameter>b</parameter>.
+				</description>
+				
+				<parameter type="int" name="a">The first index to be swapped.</parameter>
+				<parameter type="int" name="b">The second index to be swapped.</parameter>
+			</method>
+			
+			<method name="siftDown" access="protected" version="1.0">
+				<title>Sifts down a node</title>
+				<description>
+					Sifts down the node in the binary tree referred to by
+					<parameter>index</parameter>. Runs in Θ(log(n)).
+				</description>
+				
+				<parameter type="int" name="index">The index to be sifted down.</parameter>
+			</method>
+			
+			<method name="siftUp" access="protected" version="1.0">
+				<title>Sifts up a node</title>
+				<description>
+					Sifts up the node in the binary tree referred to by
+					<parameter>index</parameter>. Runs in Θ(log(n)).
+				</description>
+				
+				<parameter type="int" name="index">The index to be sifted up.</parameter>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

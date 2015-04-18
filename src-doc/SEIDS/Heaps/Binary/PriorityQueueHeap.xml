@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Binary">
+		<class name="PriorityQueueHeap" version="1.0">
+			<extends>Heap</extends>
+			
+			<title>A priority queue oriented, binary heap class</title>
+			<description>
+				<p>
+					This class represents the heap used in, and forming the
+					basis of, the <class>PriorityQueue</class> class.
+				</p>
+				<note>
+					This class is not intended for public consumption. Most
+					users should instead be using the
+					<class>PriorityQueue</class> class itself.
+				</note>
+			</description>
+			
+			<see>
+				<class>PriorityQueue</class>
+				<description>A priority queue class based on a binary heap</description>
+			</see>
+			
+			<property name="callback_compare" type="callable" access="protected" version="1.0">
+				A callback to use for the <method>PriorityQueueHeap::compare</method> method.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new heap</title>
+				<description>
+					This constructs a new, empty heap. A callback must be
+					supplied to take the place of the
+					<method>PriorityQueueHeap::compare</method> method.
+				</description>
+				
+				<parameter type="callable" name="callback_compare">A callback to use for the <method>PriorityQueueHeap::compare</method> method.</parameter>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.construct.php">SplHeap::__construct</link>
+				</see>
+			</constructor>
+			
+			<method name="compare" access="protected" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>value1</parameter> with
+						<parameter>value2</parameter>. The exact result depends
+						on the callback,
+						<parameter>PriorityQueueHeap::$callback_compare</parameter>.
+					</p>
+					<note>
+						Having multiple elements with the same value in a Heap
+						is not recommended. They will end up in an arbitrary
+						relative position.
+					</note>
+				</description>
+				
+				<parameter name="value1">The value of the first node being compared.</parameter>
+				<parameter name="value2">The value of the second node being compared.</parameter>
+				<return type="int">Result of the comparison.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splheap.compare.php">SplHeap::compare</link>
+				</see>
+			</method>
+			
+			<method name="value" access="protected" version="1.0">
+				<title>Returns the true value of a node</title>
+				<description>
+					<p>
+						Takes a node and extracts its 'value' as opposed to its
+						priority within the heap.
+					</p>
+					<p>
+						In this implementation, this method simply returns the
+						<parameter>value</parameter> property of the argument.
+					</p>
+					<p>
+						This method is called by
+						<method>Heap::hashtIndex</method> allowing one to update
+						a node's priority without knowing its current priority.
+					</p>
+				</description>
+				
+				<parameter name="value" type="SEIDS::Heaps::PriorityQueueHeapItem">The node.</parameter>
+				<return>The 'value' of the node.</return>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

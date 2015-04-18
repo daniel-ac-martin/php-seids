@@ -1,0 +1,36 @@
+{
+	"name": "dacm/php-seids",
+	"type": "library",
+	"description": "Supplementary, Easily Interchangeable Data Structures for PHP 5. Provides alternatives and supplements to the Standard PHP Library (SPL) Datastructures.",
+	"keywords": ["php-seids", "PHP SEIDS", "SEIDS", "SEIDS", "Supplementary, Easily Interchangeable Data Structures", "data structures", "spl", "heap", "linked list", "binary heap", "pairing heap", "stack", "queue", "priority queue", "dynamic array"],
+	"homepage": "http://php-seids.net",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Daniel A.C. Martin",
+			"homepage": "http://dacm.org",
+			"email": "php-seids@dacm.org",
+			"role": "Creator/Developer"
+		}
+	],
+	"minimum-stability": "stable",
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "4.6.x",
+		"phpunit/php-code-coverage": "2.0.x",
+		"squizlabs/php_codesniffer": "2.3.x",
+		"daniel-ac-martin/apidoc": "0.2.x"
+	},
+	"autoload": {
+		"psr-4": {
+			"SEIDS\\": "src/SEIDS"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"SEIDS\\": "tests/SEIDS"
+		}
+	}
+}

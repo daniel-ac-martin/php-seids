@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apidoc-config>
+	<source>
+		<directory filter="*.xml">src-doc/SEIDS</directory>
+	</source>
+	<transformations>
+		<transform template="phpnet">build/doc</transform>
+	</transformations>
+</apidoc-config>

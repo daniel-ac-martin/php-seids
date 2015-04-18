@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Binary">
+		<class name="MinHeap" version="1.0">
+			<extends>Heap</extends>
+			
+			<title>A binary min-heap class</title>
+			<description>
+				<p>
+					This class provides the main functionalities of a heap,
+					keeping the minimum on the top. The underlying
+					implementation is a binary heap.
+				</p>
+				<p>
+					It provides the same interface as <class>SplMinHeap</class>
+					with the extra methods, <method>Heap::extractInsert</method>
+					and <method>Heap::update</method> which allows one to update
+					a node in the heap.
+				</p>
+			</description>
+			
+			<see>
+				<link href="http://php.net/manual/en/class.splminheap.php">The SplMinHeap class</link>
+			</see>
+			<see>
+				<class>MaxHeap</class>
+				<description>A binary max-heap class</description>
+			</see>
+			
+			<method name="compare" access="protected" version="1.0">
+				<title>Compare elements in order to place them correctly in the heap</title>
+				<description>
+					<p>
+						Compare <parameter>value1</parameter> with
+						<parameter>value2</parameter>.
+					</p>
+					<note>
+						Having multiple elements with the same value in a Heap
+						is not recommended. They will end up in an arbitrary
+						relative position.
+					</note>
+				</description>
+				
+				<parameter name="value1">The value of the first node being compared.</parameter>
+				<parameter name="value2">The value of the second node being compared.</parameter>
+				<return type="int">Result of the comparison, positive integer if <parameter>value1</parameter> is less than <parameter>value2</parameter>, <literal>0</literal> if they are equal, negative integer otherwise.</return>
+				
+				<see>
+					<link href="http://php.net/manual/en/splminheap.compare.php">SplMinHeap::compare</link>
+				</see>
+			</method>
+		</class>
+	</namespace>
+</apidoc>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Arrays">
+		<class name="InvalidIndexException" version="1.0">
+			<extends>RuntimeException</extends>
+			<implements>ExceptionInterface</implements>
+			
+			<description>
+				<p>
+					Exception objects of this class are thrown when one calls
+					the <method>DynamicArray::offsetGet</method>,
+					<method>DynamicArray::offsetSet</method> or
+					<method>DynamicArray::offsetUnset</method> methods with an
+					invalid argument.
+				</p>
+				<p>
+					It is only intended that users should test for this
+					exception, when necessary, rather than throwing it in their
+					own code.
+				</p>
+			</description>
+			
+			<see>
+				<method>DynamicArray::offsetGet</method>
+			</see>
+			<see>
+				<method>DynamicArray::offsetSet</method>
+			</see>
+			<see>
+				<method>DynamicArray::offsetUnset</method>
+			</see>
+		</class>
+	</namespace>
+</apidoc>

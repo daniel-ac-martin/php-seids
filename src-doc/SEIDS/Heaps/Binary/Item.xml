@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Heaps::Binary">
+		<class name="Item" version="1.0">
+			<description>
+				<p>
+					This is a 'struct'-like class designed for use in the binary
+					heap class, <class>Heap</class>.
+				</p>
+				<p>
+					It is not intended for public consumption.
+				</p>
+			</description>
+			
+			<property name="data" access="public" version="1.0">
+				The data of the item.
+			</property>
+			<property name="tag" access="public" version="1.0">
+				The tag of the item.
+			</property>
+			
+			<constructor access="public" version="1.0">
+				<title>Constructs a new item</title>
+				<description>
+					This constructs a new item for use in the binary heap class.
+				</description>
+				
+				<parameter name="data">The data of the item.</parameter>
+				<parameter name="tag">The tag of the item.</parameter>
+			</constructor>
+		</class>
+	</namespace>
+</apidoc>

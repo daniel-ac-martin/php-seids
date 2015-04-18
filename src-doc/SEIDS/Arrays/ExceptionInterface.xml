@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--============================================================================
+// The PHP SEIDS Manual
+// 
+// Copyright 2015, Daniel A.C. Martin, 1997 - 2015 the PHP Documentation Group
+// Distributed under the Creative Commons Attribution 3.0 License.
+// (See the appendix for details.)
+//===========================================================================-->
+<apidoc>
+	<namespace name="SEIDS::Arrays">
+		<interface name="ExceptionInterface" version="1.0">
+			<extends>SEIDS::ExceptionInterface</extends>
+			
+			<description>
+				<p>
+					Exception objects of classes implementing this interface are
+					thrown in many cases from methods in the classes,
+					<class>DynamicArray</class> and <class>ArrayDeque</class>.
+				</p>
+				<p>
+					It is only intended that users should test for this
+					exception, when necessary, rather than throwing it in their
+					own code.
+				</p>
+			</description>
+			
+			<see>
+				<class>Dynamic::DynamicArray</class>
+			</see>
+			<see>
+				<class>Dynamic::ArrayDeque</class>
+			</see>
+		</interface>
+	</namespace>
+</apidoc>
