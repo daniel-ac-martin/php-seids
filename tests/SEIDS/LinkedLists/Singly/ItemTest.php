@@ -25,13 +25,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 	
 	public function testClone()
 	{
-		$three = null;
+		$n = 3;
 		
-		if(class_exists('SplInt')) $four  = new Item(new \SplInt(4));
-		if(class_exists('SplInt')) $three = new Item(new \SplInt(3), $four);
-		
-		$two = new Item(2, $three);
-		$one = new Item(1, $two);
+		$two = new Item(new MyObject(--$n));
+		$one = new Item(new MyObject(--$n), $two);
 		
 		$one_clone = clone $one;
 		
@@ -40,20 +37,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals($one->next->data, $one_clone->next->data);
 		
-		$one->data = 5;
-		$two->data = 6;
+		$one->data = new MyObject(3);
+		$two->data = new MyObject(4);
 		
-		$this->assertEquals(1, $one_clone->data);
-		$this->assertEquals(6, $one_clone->next->data);
-		
-		if(class_exists('SplInt'))
-		{
-			$one->data = new \SplInt(7);
-			$two->data = new \SplInt(8);
-		
-			$this->assertEquals(1, (int)$one_clone->data);
-			$this->assertEquals(8, (int)$one_clone->next->data);
-		}
+		$this->assertEquals(1, $one_clone->data->v());
+		$this->assertEquals(4, $one_clone->next->data->v());
+	}
+}
+
+class MyObject
+{
+	protected $v;
+	
+	public function __construct($v)
+	{
+		$this->v = $v;
+	}
+	
+	public function v()
+	{
+		return $this->v;
 	}
 }
 
