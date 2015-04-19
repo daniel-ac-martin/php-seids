@@ -138,6 +138,16 @@ abstract class HeapTest extends \SEIDS\IteratorTest
 		}
 	}
 	
+	public function testCloneWhenEmpty()
+	{
+		$array   = $this->buildArray();
+		$theHeap = $this->new_Heap();
+	 	
+		$theHeapClone = clone $theHeap;
+		
+		$this->assertMethodsEqual($theHeap, $theHeapClone);
+	}
+	
 	public function testCloneWithObjects()
 	{
 		$array   = $this->buildArray();

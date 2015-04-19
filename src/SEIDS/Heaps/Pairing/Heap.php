@@ -50,26 +50,29 @@ abstract class Heap extends \SEIDS\Heaps\Heap
 	
 	public function __clone()
 	{
-		$this->subheap = clone $this->subheap;
-		$this->hasht[$this->hashtIndex($this->subheap->data)][$this->subheap->tag] = $this->subheap;
-		
-		$stack = array($this->subheap);
-		
-		while(null !== ($e = array_pop($stack)) )
+		if(null !== $this->subheap)
 		{
-			if(is_object($e->data))
-			{
-				$e->data = clone $e->data;
-			}
+			$this->subheap = clone $this->subheap;
+			$this->hasht[$this->hashtIndex($this->subheap->data)][$this->subheap->tag] = $this->subheap;
 			
-			foreach($e->subheaps as $i => $v)
+			$stack = array($this->subheap);
+			
+			while(null !== ($e = array_pop($stack)) )
 			{
-				$clone                                        = clone $v;
-				$e->subheaps[$i]                              = $clone;
-				$this->hasht[$this->hashtIndex($v->data)][$i] = $clone;
-				$clone->parent                                = $e;
+				if(is_object($e->data))
+				{
+					$e->data = clone $e->data;
+				}
 				
-				array_push($stack, $clone);
+				foreach($e->subheaps as $i => $v)
+				{
+					$clone                                        = clone $v;
+					$e->subheaps[$i]                              = $clone;
+					$this->hasht[$this->hashtIndex($v->data)][$i] = $clone;
+					$clone->parent                                = $e;
+					
+					array_push($stack, $clone);
+				}
 			}
 		}
 	}
