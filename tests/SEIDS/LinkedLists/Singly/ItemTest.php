@@ -25,10 +25,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 	
 	public function testClone()
 	{
-		$n = 3;
+		$n = 5;
 		
-		$two = new Item(new \SplInt(--$n));
-		$one = new Item(new \SplInt(--$n), $two);
+		if(class_exists('SplInt')) $four  = new Item(new \SplInt(--$n));
+		if(class_exists('SplInt')) $three = new Item(new \SplInt(--$n), $four);
+		
+		$two = new Item(--$n, $three);
+		$one = new Item(--$n, $two);
 		
 		$one_clone = clone $one;
 		
@@ -37,11 +40,20 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals($one->next->data, $one_clone->next->data);
 		
-		$one->data = new \SplInt(3);
-		$two->data = new \SplInt(4);
+		$one->data = 5;
+		$two->data = 6;
 		
-		$this->assertEquals(1, (int)$one_clone->data);
-		$this->assertEquals(4, (int)$one_clone->next->data);
+		$this->assertEquals(1, $one_clone->data);
+		$this->assertEquals(6, $one_clone->next->data);
+		
+		if(class_exists('SplInt'))
+		{
+			$one->data = new \SplInt(7);
+			$two->data = new \SplInt(8);
+		
+			$this->assertEquals(1, (int)$one_clone->data);
+			$this->assertEquals(8, (int)$one_clone->next->data);
+		}
 	}
 }
 
