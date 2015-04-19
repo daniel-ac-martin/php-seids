@@ -2,9 +2,8 @@ PHP SEIDS: Supplementary, Easily Interchangeable Data Structures
 ================================================================
 
 [![Build Status][build status]][travis-ci]
-[![PHP SEIDS][logo]][website]
 
-**PHP SEIDS** provides drop-in replacements for the [SPL Data Structure
+**[PHP SEIDS]** provides drop-in replacements for the [SPL Data Structure
 classes] which offer alternative implementations and/or enhanced
 functionality.
 
@@ -59,8 +58,7 @@ Copyright (C) 2015 Daniel A.C. Martin
 
 Distributed under the MIT License.
 
- [website]:                    http://php-seids.net
- [logo]:                       http://php-seids.net/images/logo.svg
+ [PHP SEIDS]:                  http://php-seids.net
  [travis-ci]:                  https://travis-ci.org/daniel-ac-martin/php-seids
  [build status]:               https://travis-ci.org/daniel-ac-martin/php-seids.png?branch=master
  [SPL Data Structure classes]: http://php.net/manual/en/spl.datastructures.php
