@@ -25,7 +25,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 	
 	public function testClone()
 	{
-		$n = 5;
+		$n     = 5;
+		$three = null;
 		
 		if(class_exists('SplInt')) $four  = new Item(new \SplInt(--$n));
 		if(class_exists('SplInt')) $three = new Item(new \SplInt(--$n), $four);
