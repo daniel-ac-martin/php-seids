@@ -61,8 +61,8 @@ Distributed under the MIT License.
 
  [website]:                    http://php-seids.net
  [logo]:                       http://php-seids.net/images/logo.svg
- [travis-ci]:                  https://travis-ci.org/dacm/php-seids
- [build status]:               https://travis-ci.org/dacm/php-seids.png?branch=master
+ [travis-ci]:                  https://travis-ci.org/daniel-ac-martin/php-seids
+ [build status]:               https://travis-ci.org/daniel-ac-martin/php-seids.png?branch=master
  [SPL Data Structure classes]: http://php.net/manual/en/spl.datastructures.php
  [array-deque]:                http://php-seids.net/manual/en/class.seids.arrays.dynamic.arraydeque.php
  [updatable pairing heap]:     http://php-seids.net/manual/en/class.seids.heaps.pairing.heap.php
