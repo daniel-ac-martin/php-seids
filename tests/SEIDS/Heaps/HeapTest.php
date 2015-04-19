@@ -148,10 +148,10 @@ abstract class HeapTest extends \SEIDS\IteratorTest
 		
 		foreach($array as $e)
 		{
-			$theHeap->insert(new \SplInt($e));
-			$theHeap->insert(new \SplFloat((float)$e));
-			$theHeap->insert(new \SplBool((bool)$e));
-			$theHeap->insert(new \SplString((string)$e));
+			if(class_exists('SplInt'))    $theHeap->insert(new \SplInt($e));
+			if(class_exists('SplFloat'))  $theHeap->insert(new \SplFloat((float)$e));
+			if(class_exists('SplBool'))   $theHeap->insert(new \SplBool((bool)$e));
+			if(class_exists('SplString')) $theHeap->insert(new \SplString((string)$e));
 		}
 		
 		$theHeapClone = clone $theHeap;
