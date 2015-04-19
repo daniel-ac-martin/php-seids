@@ -25,14 +25,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 	
 	public function testClone()
 	{
-		$n     = 5;
 		$three = null;
 		
-		if(class_exists('SplInt')) $four  = new Item(new \SplInt(--$n));
-		if(class_exists('SplInt')) $three = new Item(new \SplInt(--$n), $four);
+		if(class_exists('SplInt')) $four  = new Item(new \SplInt(4));
+		if(class_exists('SplInt')) $three = new Item(new \SplInt(3), $four);
 		
-		$two = new Item(--$n, $three);
-		$one = new Item(--$n, $two);
+		$two = new Item(2, $three);
+		$one = new Item(1, $two);
 		
 		$one_clone = clone $one;
 		
