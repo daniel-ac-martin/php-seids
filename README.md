@@ -1,6 +1,9 @@
 PHP SEIDS: Supplementary, Easily Interchangeable Data Structures
 ================================================================
 
+* Added toJSON/fromJSON for priorityQueue (heap based)
+* Added toArray/fromArray for priorityQueue (heap based)
+
 [![Build Status][build status]][travis-ci]
 
 **[PHP SEIDS]** provides drop-in replacements for the [SPL Data Structure
