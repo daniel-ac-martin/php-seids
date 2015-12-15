@@ -1,6 +1,9 @@
 PHP SEIDS: Supplementary, Easily Interchangeable Data Structures
 ================================================================
 
+* Added toJSON/fromJSON for priorityQueue (heap based)
+* Added toArray/fromArray for priorityQueue (heap based)
+
 [![Build Status][build status]][travis-ci]
 
 **[PHP SEIDS]** provides drop-in replacements for the [SPL Data Structure
@@ -36,20 +39,6 @@ Getting started
 1. PHP 5.3.x is required
 2. Install PHP SEIDS using [Composer] (recommended) or manually
 3. Read the short [tutorials] to see how to use the library
-
-Composer Installation
----------------------
-
-1. Get [Composer]
-2. Require PHP SEIDS with `php composer.phar require daniel-ac-martin/php-seids`
-3. Install dependencies with `php composer.phar install`
-
-Contributing
-------------
-
-If you would like to contribute to PHP SEIDS please bear in mind that it is
-written according to the PSR-1 coding standard. The project is set-up to work
-with PHP_CodeSniffer to help contributors keep to this standard.
 
 License
 -------
